@@ -211,10 +211,10 @@
         "tags": [
           "anno"
         ],
-        "summary": "Get the 10 last modified annotations as an RSS 2.0 feed",
+        "summary": "Get the last modified annotations as an RSS 2.0 feed",
         "responses": {
           "200": {
-            "description": "the 10 last modified annotations"
+            "description": "the last modified annotations"
           }
         }
       }
