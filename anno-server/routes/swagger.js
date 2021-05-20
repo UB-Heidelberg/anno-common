@@ -1,41 +1,26 @@
-const {Router} = require('express')
-const yaml = require('js-yaml')
 const annoSchema = require('@kba/anno-schema')
 const {envyConf} = require('envyconf')
 
-module.exports = () => {
+const makeAutoSel = require('./libAutoselectResponseMimeType');
 
-    const router = Router()
-    const config = envyConf('ANNO')
+function makeRouter() {
+  const config = envyConf('ANNO')
 
-    const swaggerDef = annoSchema.openapi
+  function redirHTML(req, rsp) {
+    rsp.status(302);
+    rsp.header('Location', `${config.BASE_URL}${config.BASE_PATH
+      }/dist/swagger-ui/dist/index.html?url=${config.BASE_PATH}/swagger`);
+    rsp.end();
+  }
+  redirHTML.cType = 'text/html';
 
-    const swaggerDefAsJSON = JSON.stringify(swaggerDef, null, 2)
-    function sendJSON(req, resp) {
-        resp.status(200)
-        resp.header('Content-Type', 'application/json')
-        resp.send(swaggerDefAsJSON)
-    }
+  const { autoSelHnd, router } = makeAutoSel.makeRouter(annoSchema.openapi);
+  autoSelHnd.order = [
+    redirHTML,
+    ...autoSelHnd.order,
+  ];
 
-    const swaggerDefAsYAML = yaml.safeDump(swaggerDef)
-    function sendYAML(req, resp) {
-        resp.status(200)
-        resp.header('Content-Type', 'text/yaml')
-        resp.send(swaggerDefAsYAML)
-    }
-
-    router.get('/json', sendJSON)
-    router.get('/yaml', sendYAML)
-    router.get('/', (req, resp) => {
-        if (req.header('Accept').match('text/html')) {
-            resp.status(302)
-            resp.header('Location', `${config.BASE_URL}${config.BASE_PATH}/dist/swagger-ui/dist/index.html?url=${config.BASE_PATH}/swagger`)
-            return resp.end()
-        }
-        return (req.header('Accept').match('text/yaml'))
-            ? sendYAML(req, resp)
-            : sendJSON(req, resp)
-    })
-
-    return router
+  return router;
 }
+
+module.exports = makeRouter;

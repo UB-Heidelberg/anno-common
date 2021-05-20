@@ -10,5 +10,9 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-util#readme",
   "author": "kba",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jsonbased-yamlify-pmb": "^0.1.4",
+    "esmod-pmb": "^0.1.11"
+  }
 }
