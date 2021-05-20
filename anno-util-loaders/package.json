@@ -19,6 +19,6 @@
     "async": "^2.3.0",
     "chokidar": "^1.7.0",
     "envyconf": "file:../envyconf/",
-    "js-yaml": "3.10.0"
+    "safeload-yaml-pmb": "^4.210519.0"
   }
 }

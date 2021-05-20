@@ -1,8 +1,14 @@
 const fs = require('fs')
 const errors = require('@kba/anno-errors')
 const chokidar = require('chokidar')
-const YAML = require('js-yaml')
+const parseYAML = require('safeload-yaml-pmb')
 const {envyConf} = require('envyconf')
+
+const supportedConfParsers = {
+  yml: parseYAML,
+  yaml: parseYAML,
+  json: JSON.parse,
+};
 
 
 module.exports = function ConfigLoaderProcessorFactory(processorClass, envyconfName) {
@@ -15,13 +21,16 @@ module.exports = function ConfigLoaderProcessorFactory(processorClass, envyconfN
 
         function parseContents(err, contents) {
             if (err) {
-                console.log(new Error(`Error reading file ${CONF_FILE} ${err}`))
+                console.error(new Error(`Error reading file ${CONF_FILE} ${err}`))
                 return
             }
-            let confData = (CONF_FILE.endsWith('.yml'))
-                ? YAML.safeLoad(contents)
-                : JSON.parse(contents)
-            processor = new processorClass(confData)
+            const confFext = (/\.(\w+)$/.exec(CONF_FILE) || false)[1];
+            const confParser = supportedConfParsers[confFext];
+            if (!confParser) {
+              throw new Error('Unsupported config file type: ' + CONF_FILE);
+            }
+            const confData = confParser(contents);
+            processor = new processorClass(confData);
         }
         try {
             const contents = fs.readFileSync(CONF_FILE)
