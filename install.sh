@@ -84,6 +84,10 @@ function maybe_prepare_pkglock_for_lerna () {
   [ "${NPM_VER%%.*}" -ge 7 ] || warnbox "npm too old." \
     "$FUNCNAME will probably fail."
 
+  local SLY="$SELFPATH/node_modules/safeload-yaml-pmb"
+  [ -d "$SLY" ] || warnbox "Not yet installed: $SLY" \
+    "Try installing the monorepo toplevel package first."
+
   for SUB in [a-z]*/package.json; do
     SUB="$(dirname -- "$SUB")"
     echo; echo
