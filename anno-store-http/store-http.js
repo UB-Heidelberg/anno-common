@@ -43,8 +43,11 @@ class HttpStore extends Store {
         this._httpClient.post('/', anno, this._axiosConfigFromAnnoOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(axiosErr => {
-                const err = new Error(axiosErr.response.data)
-                err.code = axiosErr.response.status
+                window.axiosErr = axiosErr;
+                const resp = (axiosErr.response || false);
+                const err = new Error(resp.data || '(No response data)')
+                err.origErr = axiosErr;
+                err.code = resp.status;
                 cb(err)
             })
     }
