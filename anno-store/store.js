@@ -104,7 +104,8 @@ class Store {
                 next(...args)
             })
         }, (err, pass) => {
-            const userId = ctx.user && ctx.user.id ? ctx.user.id : ctx.user
+            const user = (ctx.user || false);
+            const userId = (user.id || user);
             if (userId) {
                 if (err) {
                     // this.log.debug(`${userId} may not ${ctx.method}: ${err}`)
