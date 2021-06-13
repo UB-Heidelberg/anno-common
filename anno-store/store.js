@@ -104,15 +104,6 @@ class Store {
                 next(...args)
             })
         }, (err, pass) => {
-            const user = (ctx.user || false);
-            const userId = (user.id || user);
-            if (userId) {
-                if (err) {
-                    // this.log.debug(`${userId} may not ${ctx.method}: ${err}`)
-                } else {
-                    // this.log.debug(`${userId} MAY ${ctx.method}: ${pass}`)
-                }
-            }
             if (err)
                 return cb(err)
             if (ctx.dryRun)
