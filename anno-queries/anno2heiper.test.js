@@ -191,7 +191,7 @@ const doiTestAnno1 = {
 
 
 tap.test('anno2heiper revisions', t => {
-    const {heiperJson, anno} = anno2heiper(doiTestAnno1, '10.1001/test.{{ unversioned }}{{ revision }}')    
+    const {heiperJson, anno} = anno2heiper(doiTestAnno1, '10.1001/test.{{ unversioned }}{{ revision }}')
     t.equals(heiperJson[0].doi, '10.1001/test.B-iAh2rbRw-jkvpqWk8D1w')
     t.equals(heiperJson[1].doi, '10.1001/test.B-iAh2rbRw-jkvpqWk8D1w_1')
     t.equals(heiperJson[2].doi, '10.1001/test.B-iAh2rbRw-jkvpqWk8D1w_2')

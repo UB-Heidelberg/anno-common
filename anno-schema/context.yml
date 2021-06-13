@@ -28,7 +28,7 @@
     versionOf:
       '@id': "annox:versionOf"
       '@type': "@id"
-    deleted: 
+    deleted:
       '@id': 'schema:dateDeleted'
     collection:
       '@id': 'dcterms:isPartOf'

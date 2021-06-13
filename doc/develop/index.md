@@ -58,8 +58,8 @@ Testing and building is orchestrated with a self-documenting Makefile. Running `
     TEMPDIR   Directory for temporary data. Default: '/home/kba/build/github.com/kba/anno-docker/anno-common/temp'
     REPORTER  TAP reporter to use. Default tap. One of
                 classic doc dot dump json jsonstream
-                landing list markdown min nyan progress  
-                silent spec tap xunit 
+                landing list markdown min nyan progress
+                silent spec tap xunit
     TESTS     All Tests. Default: './anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/anno2heiper.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js'
 
 <!-- END-EVAL -->

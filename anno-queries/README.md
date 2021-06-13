@@ -56,7 +56,7 @@ annotation.
 }
 ```
 ### simpleTagBody
-Find/Create simple tag bodies. 
+Find/Create simple tag bodies.
 A simple tag body is a `TextualBody` with a `purpose` of `tagging` and a value.
 #### Example
 ```js
@@ -73,7 +73,7 @@ A simple tag body is a `TextualBody` with a `purpose` of `tagging` and a value.
 }
 ```
 ### semanticTagBody
-Find/Create semantic tag bodies. 
+Find/Create semantic tag bodies.
 A semantic tag body is a web resource (must have an `id`) with the sole purpose
 of `classifying`.
 #### Example

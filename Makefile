@@ -10,8 +10,8 @@ TEMPDIR = $(PWD)/temp
 
 # TAP reporter to use. Default "$(REPORTER)". One of
 #   classic doc dot dump json jsonstream
-#   landing list markdown min nyan progress  
-#   silent spec tap xunit 
+#   landing list markdown min nyan progress
+#   silent spec tap xunit
 #REPORTER = spec
 REPORTER = tap
 
@@ -72,7 +72,7 @@ prepublish:
 # Setup test fixtures
 .PHONY: bootstrap-test
 bootstrap-test: bootstrap anno-fixtures/index.json
-	
+
 anno-fixtures/index.json:
 	cd $(dir $@) && make $(notdir $@)
 

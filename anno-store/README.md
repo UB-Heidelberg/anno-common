@@ -43,7 +43,7 @@ For example to override the `create(anno, options, callback)` method:
 ```js
 // my-store/index.js
 class MyStore extends require('@kba/anno-store') {
-  
+
   _create(options, callback) {
     const anno = options.anno
     // ...

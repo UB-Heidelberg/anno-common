@@ -37,7 +37,7 @@ module.exports = {
             if (err) return console.error(err)
             const query = []
 
-            if (argv.target) query.push({'target.source': argv.target}) 
+            if (argv.target) query.push({'target.source': argv.target})
 
             if (argv['target-type']) query.push({'target.type': argv.type})
 

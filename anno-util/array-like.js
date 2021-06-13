@@ -6,7 +6,7 @@
  * ### `ensureArray(obj, k)`
  *
  * Ensure that `obj[k]` is an array.
- * 
+ *
  * - If `obj[k]` is an array, return it.
  * - If `obj[k]` is not defined or `null`, return an empty array
  * - Otherwise return an array consisting of `[obj[k]]` only

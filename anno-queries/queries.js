@@ -48,7 +48,7 @@ class AnnoQuery {
 
 /**
  * ### textualHtmlBody
- * 
+ *
  * Find/Create bodies with included HTML content, as used in a standard text
  * annotation.
  *
@@ -82,7 +82,7 @@ class textualHtmlBody extends AnnoQuery {
 /**
  * ### simpleTagBody
  *
- * Find/Create simple tag bodies. 
+ * Find/Create simple tag bodies.
  *
  * A simple tag body is a `TextualBody` with a `purpose` of `tagging` and a value.
  *
@@ -124,7 +124,7 @@ class simpleTagBody extends AnnoQuery {
 /**
  * ### semanticTagBody
  *
- * Find/Create semantic tag bodies. 
+ * Find/Create semantic tag bodies.
  *
  * A semantic tag body is a web resource (must have an `id`) with the sole purpose
  * of `classifying`.
@@ -198,7 +198,7 @@ class relationLinkBody extends AnnoQuery {
  * holds the SVG inline.
  *
  * #### Example
- * 
+ *
  * ```js
  * {
  *   "type": "SvgSelector",

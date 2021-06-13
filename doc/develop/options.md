@@ -16,7 +16,7 @@ Include annotations that have been set to `deleted`, which would otherwise resul
 
 ## forceDelete
 
-Completely remove an annotation, not just set it to `delete`. 
+Completely remove an annotation, not just set it to `delete`.
 
 Subsequent retrievals will result in `404` not `410`.
 
