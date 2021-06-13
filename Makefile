@@ -116,7 +116,7 @@ test-all: $(TESTS)
 # Run all tests set as TESTS.
 .PHONY: test
 test: $(TESTS)
-	-tap -R$(REPORTER) $^ | grep -v async
+	-tap -R$(REPORTER) $^
 
 # Run all unit/integration tests in <MODULE>, e.g. make test:store-sql
 .PHONY: anno-%
