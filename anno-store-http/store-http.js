@@ -107,6 +107,7 @@ class HttpStore extends Store {
     _delete(options, cb) {
         const {annoId} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
+        console.log('anno-store-http: gonna delete', { annoUrl });
         this._httpClient.delete(annoUrl, this._axiosConfigFromAnnoOptions(options))
             .then(() => cb())
             .catch(err => {
