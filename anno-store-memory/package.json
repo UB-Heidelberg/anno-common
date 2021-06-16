@@ -12,7 +12,7 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-memory#readme",
   "dependencies": {
-    "@kba/anno-store-mongolike": "^0.0.8",
+    "@kba/anno-store-mongolike": "file:../anno-store-mongolike/",
     "nedb": "^1.8.0"
   }
 }

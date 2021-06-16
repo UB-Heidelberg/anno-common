@@ -14,12 +14,12 @@
     "test": "echo no test"
   },
   "dependencies": {
-    "@kba/anno-queries": "0.0.4",
-    "@kba/anno-schema": "^0.0.8",
-    "@kba/anno-store": "^0.0.8",
-    "@kba/anno-store-file": "^0.0.8",
-    "@kba/anno-util": "^0.0.2",
-    "envyconf": "^0.0.5",
+    "@kba/anno-queries": "file:../anno-queries/",
+    "@kba/anno-schema": "file:../anno-schema/",
+    "@kba/anno-store": "file:../anno-store/",
+    "@kba/anno-store-file": "file:../anno-store-file/",
+    "@kba/anno-util": "file:../anno-util/",
+    "envyconf": "file:../envyconf/",
     "get-stdin": "^5.0.1",
     "mustache": "^2.3.0",
     "object-prune": "^0.0.4",

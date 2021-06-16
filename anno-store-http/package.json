@@ -12,12 +12,12 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-http#readme",
   "dependencies": {
-    "@kba/anno-errors": "^0.0.2",
-    "@kba/anno-schema": "^0.0.8",
-    "@kba/anno-store": "^0.0.8",
-    "@kba/anno-util": "^0.0.2",
+    "@kba/anno-errors": "file:../anno-errors/",
+    "@kba/anno-schema": "file:../anno-schema/",
+    "@kba/anno-store": "file:../anno-store/",
+    "@kba/anno-util": "file:../anno-util/",
     "axios": "^0.15.3",
-    "envyconf": "^0.0.5",
+    "envyconf": "file:../envyconf/",
     "querystring": "^0.2.0"
   }
 }

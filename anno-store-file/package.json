@@ -12,8 +12,8 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-file#readme",
   "dependencies": {
-    "@kba/anno-store-mongolike": "^0.0.8",
-    "envyconf": "^0.0.5",
+    "@kba/anno-store-mongolike": "file:../anno-store-mongolike/",
+    "envyconf": "file:../envyconf/",
     "nedb": "^1.8.0"
   }
 }

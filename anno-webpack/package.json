@@ -15,18 +15,18 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-webpack#readme",
   "dependencies": {
-    "@kba/anno-errors": "^0.0.2",
-    "@kba/anno-queries": "0.0.4",
-    "@kba/anno-schema": "^0.0.8",
-    "@kba/anno-store": "^0.0.8",
-    "@kba/anno-store-http": "^0.0.8",
-    "@kba/anno-store-memory": "^0.0.8"
+    "@kba/anno-errors": "file:../anno-errors/",
+    "@kba/anno-queries": "file:../anno-queries/",
+    "@kba/anno-schema": "file:../anno-schema/",
+    "@kba/anno-store": "file:../anno-store/",
+    "@kba/anno-store-http": "file:../anno-store-http/",
+    "@kba/anno-store-memory": "file:../anno-store-memory/"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
     "babel-preset-es2015": "^6.24.1",
-    "envyconf": "^0.0.5",
+    "envyconf": "file:../envyconf/",
     "json-loader": "^0.5.4",
     "webpack": "^2.4.1",
     "yargs": "^7.0.2"

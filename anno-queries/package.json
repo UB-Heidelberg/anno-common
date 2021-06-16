@@ -10,10 +10,10 @@
   "author": "kba",
   "license": "MIT",
   "dependencies": {
-    "@kba/anno-util": "^0.0.2",
+    "@kba/anno-util": "file:../anno-util/",
     "object-prune": "^0.0.4"
   },
   "devDependencies": {
-    "@kba/anno-fixtures": "0.0.4"
+    "@kba/anno-fixtures": "file:../anno-fixtures/"
   }
 }

@@ -12,16 +12,16 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno",
   "dependencies": {
-    "@kba/anno-errors": "^0.0.2",
-    "@kba/anno-plugins": "^0.0.8",
-    "@kba/anno-queries": "0.0.4",
-    "@kba/anno-schema": "^0.0.8",
-    "@kba/anno-store": "^0.0.8",
-    "@kba/anno-store-file": "^0.0.8",
-    "@kba/anno-store-memory": "^0.0.8",
-    "@kba/anno-util": "^0.0.2",
-    "@kba/anno-util-loaders": "^0.0.8",
-    "envyconf": "^0.0.5",
+    "@kba/anno-errors": "file:../anno-errors/",
+    "@kba/anno-plugins": "file:../anno-plugins/",
+    "@kba/anno-queries": "file:../anno-queries/",
+    "@kba/anno-schema": "file:../anno-schema/",
+    "@kba/anno-store": "file:../anno-store/",
+    "@kba/anno-store-file": "file:../anno-store-file/",
+    "@kba/anno-store-memory": "file:../anno-store-memory/",
+    "@kba/anno-util": "file:../anno-util/",
+    "@kba/anno-util-loaders": "file:../anno-util-loaders/",
+    "envyconf": "file:../envyconf/",
     "tap": "^11.0.1"
   }
 }

@@ -14,11 +14,11 @@
   "license": "MIT",
   "dependencies": {
     "ajv": "^5.2.0",
-    "envyconf": "^0.0.5",
+    "envyconf": "file:../envyconf/",
     "js-yaml": "3.10.0",
     "mustache": "^2.3.0"
   },
   "devDependencies": {
-    "@kba/anno-fixtures": "0.0.4"
+    "@kba/anno-fixtures": "file:../anno-fixtures/"
   }
 }

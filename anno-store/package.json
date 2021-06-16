@@ -12,11 +12,11 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store#readme",
   "dependencies": {
-    "@kba/anno-queries": "0.0.4",
-    "@kba/anno-schema": "^0.0.8",
-    "@kba/anno-util": "^0.0.2",
+    "@kba/anno-queries": "file:../anno-queries/",
+    "@kba/anno-schema": "file:../anno-schema/",
+    "@kba/anno-util": "file:../anno-util/",
     "async": "^2.3.0",
-    "envyconf": "^0.0.5",
+    "envyconf": "file:../envyconf/",
     "fetch-ponyfill": "4.1.0",
     "slugid": "^1.1.0"
   }

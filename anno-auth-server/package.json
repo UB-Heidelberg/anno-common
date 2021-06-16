@@ -13,11 +13,11 @@
   "author": "kba",
   "license": "MIT",
   "dependencies": {
-    "@kba/anno-plugins": "^0.0.8",
+    "@kba/anno-plugins": "file:../anno-plugins/",
     "body-parser": "^1.17.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
-    "envyconf": "^0.0.5",
+    "envyconf": "file:../envyconf/",
     "express": "^4.15.0",
     "express-session": "^1.15.2",
     "express-unless": "^0.3.0",
