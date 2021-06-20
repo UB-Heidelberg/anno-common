@@ -1,31 +1,28 @@
-const express = require('express')
-const authRouter = require('./routes/auth')
-const {envyConf} = require('envyconf')
 
-const config = envyConf('ANNO', {
-  AUTH_PORT: "3008",
-  AUTH_SESSION_KEY: '9rzF3nWDAhmPS3snhh3nwe4RCDNebaIkg7Iw3aJY9JLbiXxnVahcTCckuls6qlaK',
-  AUTH_BACKEND: 'plain',
-})
+require('p-fatal');
 
-const app = express()
+const express = require('express');
+const {envyConf} = require('envyconf');
 
-app.set('views', `${__dirname}/views`)
-app.set('view engine', 'pug')
+const defaultConfig = require('./cfg.defaults.js');
+const decideAuthRouterConfig = require('./src/decideAuthRouterConfig');
+const fallbackErrorHandler = require('./src/fallbackErrorHandler');
+const authRouter = require('./routes/auth');
 
-app.use(authRouter({
-  sessionKey: config.AUTH_SESSION_KEY,
-  backend: config.AUTH_BACKEND,
-}))
+async function setupExpress() {
+  const config = envyConf('ANNO', defaultConfig);
+  console.debug('Config:', JSON.stringify(config, null, 2));
+  const port = (+config.AUTH_PORT || 0);
+  if (port < 1) { throw new RangeError('Unsupported port number: ' + port); }
 
-app.use((err, req, resp, next) => {
-  console.log(err)
-  resp.status(err.code || 400)
-  resp.send(err.message)
-})
+  const authRouterConfig = await decideAuthRouterConfig(config);
 
-const port = config.AUTH_PORT
-app.listen(port, () => {
-  console.log("Config", JSON.stringify(config, null, 2))
-  console.log(`Listening on port ${port}`)
-})
+  const app = express();
+  app.set('views', `${__dirname}/views`);
+  app.set('view engine', 'pug');
+  app.use(authRouter(authRouterConfig));
+  app.use(fallbackErrorHandler);
+  app.listen(port, () => console.log(`Listening on port ${port}`));
+}
+
+setupExpress();

@@ -3,7 +3,7 @@ const cookieParser        = require('cookie-parser')
 const expressSession      = require('express-session')
 const morgan              = require('morgan')
 
-module.exports = function createAuthRoute({backend, sessionKey}) {
+module.exports = function createAuthRoute({backend, sessionMasterKey}) {
   const app = express.Router()
   app.use(morgan('dev'))
   app.use((req, resp, next) => {
@@ -16,7 +16,7 @@ module.exports = function createAuthRoute({backend, sessionKey}) {
   })
   app.use(cookieParser())
   app.use(expressSession({
-    secret: sessionKey,
+    secret: sessionMasterKey,
     resave: false,
     saveUninitialized: false
   }))
