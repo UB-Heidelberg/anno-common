@@ -5,7 +5,6 @@ const nodemailer          = require('nodemailer')
 const express             = require('express')
 const connectFlash        = require('connect-flash')
 const {PreCollectionFile} = require('@kba/anno-plugins')
-const truthy              = require('truthy')
 
 function textRequestMail({sub, displayName, collections, email, reasons}) {
   email = email ? email : 'not provided'
