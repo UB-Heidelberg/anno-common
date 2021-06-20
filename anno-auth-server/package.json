@@ -30,6 +30,5 @@
     "truthy": "0.0.1"
   },
   "devDependencies": {
-    "pm2": "^2.4.6"
   }
 }
