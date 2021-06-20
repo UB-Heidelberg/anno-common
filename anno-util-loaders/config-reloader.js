@@ -13,9 +13,10 @@ const supportedConfParsers = {
 
 module.exports = function ConfigLoaderProcessorFactory(processorClass, envyconfName) {
     return function() {
-        const CONF_FILE = envyConf('ANNO', {
-            [envyconfName]: '/FILENAME-NOT-SET.json'
-        })[envyconfName]
+        const CONF_FILE = envyConf('ANNO')[envyconfName]
+        if (!CONF_FILE) {
+          throw new Error('Filename not configured for option ' + envyconfName);
+        }
         // console.log({processorClass, envyconfName, CONF_FILE})
         let processor = new processorClass()
 
