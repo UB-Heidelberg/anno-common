@@ -7,9 +7,9 @@ const {targetId}    = require('@kba/anno-queries')
 const async = require('async')
 
 function collectionConfigForAnno(req, anno) {
-  return req.annoOptions.collectionConfigFor
-    ? req.annoOptions.collectionConfigFor(anno.collection || 'default')
-    : {}
+  const configs = (req.annoOptions || false).collectionConfigFor;
+  if (!configs) { return {}; }
+  return configs(anno.collection || 'default');
 }
 
 function purlForAnno(req, anno) {
@@ -27,8 +27,13 @@ module.exports = ({store}) => {
     console.log("Entering Anno Router")
 
     function getAnnotation(req, resp, next) {
-        store.get(req.params.annoId, req.annoOptions, (err, doc) => {
-            if (err) return next(err)
+      const { annoId } = req.params;
+      console.debug('GETting annotation %s: %o', annoId, req.params);
+        store.get(annoId, req.annoOptions, (err, doc) => {
+            if (err) {
+              console.error('Error GETting annotation %s: %o', annoId, err);
+              return next(err);
+            }
             const purl = purlForAnno(req, doc)
             const canonical = doc.doi ? `https://doi.org/${doc.doi}`
               : purl ? purl
@@ -210,15 +215,25 @@ module.exports = ({store}) => {
     // PUT /anno/{annoId}
     //
     router.put('/:annoId', (req, resp, next) => {
-        const anno = prune(req.body)
-        const {params} = req
-        store.revise(req.params.annoId, anno, req.annoOptions, (err, doc) => {
-            if (err) return next(err)
-            // XXX wtf
-            params.annoId = doc.id
-            req.params = params
-            resp.status(201)
-            return getAnnotation(req, resp, next)
+        const anno = prune(req.body);
+        const { params } = req;
+        const { annoId } = params;
+        console.debug('Received PUT %s: %o', annoId, params);
+        store.revise(annoId, anno, req.annoOptions, (err, doc) => {
+            if (err) {
+              console.error('Error saving PUT %s: %o', annoId, err);
+              return next(err);
+            }
+            console.debug('Saved (PUT) %s', annoId);
+            const modifiedReq = {
+              ...req,
+              params: {
+                ...params,
+                annoId: doc.id,
+              },
+            };
+            resp.status(201);
+            return getAnnotation(modifiedReq, resp, next);
         })
     })
 
