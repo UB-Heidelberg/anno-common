@@ -7,8 +7,9 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 
 envyConf('ANNO', {
-    PORT: "3000",
-    BASE_URL: 'http://localhost:3000',
+    LOGLEVEL: 'debug',
+    PORT: '33321',
+    BASE_URL: 'http://localhost:33321/',
     BASE_PATH: '',
     STORE: '@kba/anno-store-file',
     DIST_DIR: __dirname + '/public',
@@ -23,7 +24,7 @@ function start(app, cb) {
 
     app.use(bodyParser.json({
       type: '*/*',
-      limit: 2 * 1024 * 1024
+      limit: 16 * 1024 * 1024,
     }))
 
     app.use(morgan('short', {
