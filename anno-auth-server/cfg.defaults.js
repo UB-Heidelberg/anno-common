@@ -7,5 +7,5 @@ module.exports = {
   AUTH_PORT: '3008',
   AUTH_SESSION_KEY_SOURCE: 'localTextFile',
   AUTH_SESSION_KEY_PARAM: '/etc/annosrv/auth/host_secrets/sessions.key',
-  AUTH_BACKEND: 'plain',
+  AUTH_BACKEND: 'plain-insecure-noverify',
 };

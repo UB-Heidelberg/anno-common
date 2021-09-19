@@ -7,18 +7,11 @@ function dev_server () {
   local SELFPATH="$(readlink -m -- "$BASH_SOURCE"/..)"
   cd -- "$SELFPATH" || return $?
 
-  local BACKEND_DIR="${SELFPATH%/*/*}"
-  local CONFIG_DIR="$BACKEND_DIR/config"
-  local COLLECTION="$CONFIG_DIR/collections.yaml"
-  echo "D: using collections config file: $COLLECTION" >&2
-  if [ ! -f "$COLLECTION" ]; then
-    COLLECTION="${SELFPATH%/*}/anno-server/example_collections_file.json"
-    echo "D: … but it does not exist => using fallback: $COLLECTION" >&2
-  fi
-
+  local ANNO_COMMON_DIR="${SELFPATH%/*}"
   # seems to work without -> # lerna bootstrap --hoist || return $?
-  export ANNO_COLLECTION_FILE="$COLLECTION"
-  export ANNO_AUTH_BACKEND='plain'
+  export ANNO_COLLECTION_FILE="$ANNO_COMMON_DIR$(
+    )/anno-server/example_collections_file.json"
+  export ANNO_USER_FILE="$ANNO_COMMON_DIR/anno-plugins/users-example.json"
   exec nodejs auth-server.js
 }
 
