@@ -33,7 +33,7 @@ module.exports = class AuthPlain extends AuthBase {
     const error = req.flash('error')
     const {from, collectionsAvailable} = req
     if (req.user) {
-      resp.redirect(`logout?from=${from}`)
+      resp.redirect(`logout?from=${from || '/'}`)
     } else {
       resp.render('plain-login', {
         sub: false,
@@ -50,7 +50,7 @@ module.exports = class AuthPlain extends AuthBase {
     const {collectionsAvailable} = req
     const sub = this.determineUser(req)
     if (!req.user) {
-      resp.redirect(`login?from=${from}`)
+      resp.redirect(`login?from=${from || '/'}`)
     } else {
       resp.render('plain-logout', {
         from: 'logout',
