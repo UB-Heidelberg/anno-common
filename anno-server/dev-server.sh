@@ -11,4 +11,4 @@ export ANNO_STORE_HOOKS_POST='
   @kba/anno-plugins:CreatorInjectorStatic
   '
 export ANNO_COLLECTION_FILE='example_collections_file.json'
-nodemon server.js
+exec nodejs server.js

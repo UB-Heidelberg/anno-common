@@ -19,6 +19,7 @@
     "async": "^2.3.0",
     "chokidar": "^1.7.0",
     "envyconf": "file:../envyconf/",
-    "safeload-yaml-pmb": "^4.210519.0"
+    "safeload-yaml-pmb": "^4.210519.0",
+    "strip-bom": "^5.0.0"
   }
 }
