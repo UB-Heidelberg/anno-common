@@ -29,9 +29,9 @@ module.exports = class AuthShibboleth extends AuthBase {
     getLogin(req, resp, next) {this.postLogin(req, resp, next)}
 
     postLogin(req, resp, next) {
-      const sub = this.determineUser(req)
+      const sessUserName = this.determineUser(req)
       const {from} = req
-      if (sub) {
+      if (sessUserName) {
         if (!from) {
           resp.status(501)
           next('Logged in but cannot determine where to redirect')

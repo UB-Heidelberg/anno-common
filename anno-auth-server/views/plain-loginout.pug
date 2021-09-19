@@ -1,0 +1,33 @@
+extends ./layout.pug
+block body
+	.container
+
+		.row
+			if error != ''
+				.alert.alert-danger= error
+			if sessUserName
+				.alert.alert-success Logged in as #{JSON.stringify(sessUserName)}
+				.row
+					form(method="POST", action="logout").form-horizontal
+						.form-group
+							.col-sm-offset-3.col-sm-3
+								button.btn.btn-warning(type='submit') Logout
+				.row
+					hr
+					.col-sm-3.col-sm-offset-2
+						p Or login as someone else:
+
+		.row
+			form(method="POST").form-horizontal
+				.form-group
+					label(for='username').control-label.col-sm-3 Username:
+					.col-sm-3
+						input(type='text',name='username',value=sessUserName).form-control#username
+				.form-group
+					label(for='password').control-label.col-sm-3 Password:
+					.col-sm-3
+						input(type='password',name='password').form-control#password
+				.form-group
+					.col-sm-3.col-sm-offset-3
+						button.btn.btn-default(type='submit') Login
+

@@ -6,12 +6,12 @@ const express             = require('express')
 const connectFlash        = require('connect-flash')
 const {PreCollectionFile} = require('@kba/anno-plugins')
 
-function textRequestMail({sub, displayName, collections, email, reasons}) {
+function textRequestMail({sessUserName, displayName, collections, email, reasons}) {
   email = email ? email : 'not provided'
   return `
 Dear Admin,
 
-a user '${displayName}' (Email: ${email}, ID: ${sub}) has requested access to these collections: ${collections.map(c => `\n  * ${c}`)}
+a user '${displayName}' (Email: ${email}, ID: ${sessUserName}) has requested access to these collections: ${collections.map(c => `\n  * ${c}`)}
 
 Reasons given:
 
@@ -19,7 +19,7 @@ ${reasons}
 
 If the user is not yet in the users.yml, add an entry such as this:
 
-'${sub}':
+'${sessUserName}':
   public:
       displayName: "${displayName}"
   rules:
@@ -115,8 +115,8 @@ module.exports =
       // GET /auth/token
       //
       this.router.get('/token/:iss', (req, resp, next) => {
-        const sub = this.determineUser(req)
-        if (!sub) {
+        const sessUserName = this.determineUser(req)
+        if (!sessUserName) {
           resp.status(401)
           resp.header('Location', `login?from=${req.from}`)
           return resp.send('Not logged in. <a href="../login">You can login here</a>')
@@ -137,7 +137,7 @@ module.exports =
         const now = Math.floor(Date.now() / 1000)
         const exp = now + (collectionConfig.tokenExpiration || TOKEN_EXPIRATION)
 
-        const token = jsonwebtoken.sign({iss, sub, exp}, secret)
+        const token = jsonwebtoken.sign({iss, sub: sessUserName, exp}, secret)
         if (req.xhr) resp.header('X-Token', token)
         resp.send(token)
       })
@@ -146,12 +146,12 @@ module.exports =
       // GET /auth/register
       //
       this.router.get('/register', (req, resp, next) => {
-        const sub = this.determineUser(req)
+        const sessUserName = this.determineUser(req)
         const {collectionsAvailable} = req
         resp.status(200).render('register', {
           from: 'register',
           debugAuth: req.debugAuth,
-          sub,
+          sessUserName,
           collectionsAvailable,
           TEXT_REGISTER
         })
@@ -161,14 +161,14 @@ module.exports =
       // GET /auth/request
       //
       this.router.get('/request', (req, resp, next) => {
-        const sub = this.determineUser(req)
+        const sessUserName = this.determineUser(req)
         const success = req.query.ok
         const {collectionsAvailable} = req
         const collectionsSelected = new Set((req.query.c || '').split(',').map(c => c.trim()))
         resp.status(200).render('request', {
           from: 'request',
           debugAuth: req.debugAuth,
-          sub,
+          sessUserName,
           collectionsAvailable,
           collectionsSelected,
           success,
@@ -180,14 +180,14 @@ module.exports =
       // POST /auth/request
       //
       this.router.post('/request', bodyParser.urlencoded({extended: true}), (req, resp) => {
-        const sub = this.determineUser(req)
+        const sessUserName = this.determineUser(req)
         const collections = Object.keys(req.body).filter(c => c.match(/^c_/)).map(c => c.substr(2))
         const {displayName, reasons, email} = req.body || 'None'
-        const text = textRequestMail({sub, displayName, collections, reasons, email})
+        const text = textRequestMail({sessUserName, displayName, collections, reasons, email})
         const mail = {
           from: SMTP_FROM,
           to: SMTP_TO,
-          subject: `Anno-Registrierung ${sub}`,
+          subject: `Anno-Registrierung ${sessUserName}`,
           text
         }
         smtp.sendMail(mail, err => {

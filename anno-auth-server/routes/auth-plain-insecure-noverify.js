@@ -2,6 +2,27 @@ const AuthBase = require('./auth-base')
 const passport = require('passport')
 const bodyParser   = require('body-parser')
 
+
+function findUserId(req) { return ((req.user || false).id || ''); }
+
+function getLoginOrLogout(which, req, resp) {
+  const {
+    debugAuth,
+    collectionsAvailable,
+  } = req;
+  const sessUserName = findUserId(req);
+  // const isLoggedIn = Boolean(sessUserName);
+  // const wantLoggedIn = (which === 'login');
+  resp.render('plain-loginout', {
+    sessUserName,
+    from: (req.query.from || ''),
+    debugAuth,
+    collectionsAvailable,
+    error: req.flash('error'),
+  });
+}
+
+
 module.exports = class AuthPlain extends AuthBase {
 
   constructor(...args) {
@@ -27,43 +48,15 @@ module.exports = class AuthPlain extends AuthBase {
     this.router.use(bodyParser.urlencoded({extended: true}))
   }
 
-  determineUser(req) {return req.user ? req.user.id : ''}
-
-  getLogin(req, resp) {
-    const error = req.flash('error')
-    const {from, collectionsAvailable} = req
-    if (req.user) {
-      resp.redirect(`logout?from=${from || '/'}`)
-    } else {
-      resp.render('plain-login', {
-        sub: false,
-        debugAuth: req.debugAuth,
-        collectionsAvailable,
-        error
-      })
-    }
-  }
+  determineUser(req) { return findUserId(req); }
+  getLogin(req, resp) { getLoginOrLogout('login', req, resp); }
 
   getLogout(req, resp) {
-    const {from} = req.query
-    const error = req.flash('error')
-    const {collectionsAvailable} = req
-    const sub = this.determineUser(req)
-    if (!req.user) {
-      resp.redirect(`login?from=${from || '/'}`)
-    } else {
-      resp.render('plain-logout', {
-        from: 'logout',
-        sub,
-        debugAuth: req.debugAuth,
-        collectionsAvailable,
-        error
-      })
-    }
+    resp.redirect('login?from=' + encodeURIComponent(req.query.from || ''));
   }
 
   postLogin(req, resp, next) {
-    console.log(req.query)
+    console.debug('postLogin:', req.query);
     passport.authenticate('local', {
       successRedirect: req.query.from || 'logout',
       failureRedirect: 'login',
