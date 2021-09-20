@@ -14,6 +14,7 @@ function install_cli () {
   esac
 
   check_missing_os_packages || return $?
+  vdo update_git_submodules || return $?
 
   echo "D: npm install monorepo @ $PWD:"
   v_npm_install_current_directory || return $?
@@ -31,6 +32,15 @@ function vdo () { echo -n "D: $*: "; "$@"; }
 function check_missing_os_packages () {
   vdo rapper --version || return 3$(
     echo "E: Please apt-get install raptor2-utils" >&2)
+}
+
+
+function update_git_submodules () {
+  git submodule update --init \
+    --recursive \
+    --jobs 16 \
+    || return $?
+  echo "D: updated git submodules."
 }
 
 
