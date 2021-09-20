@@ -1,6 +1,33 @@
 const AuthBase = require('./auth-base')
 const passport = require('passport')
-const bodyParser   = require('body-parser')
+const bodyParser = require('body-parser')
+const callbackify = require('wrap-sync');
+const mapValues = require('lodash.mapvalues');
+
+
+const logPrefix = 'insecure plain auth:';
+
+
+async function checkLogin(username, pswdReceived) {
+  const unStr = String(username || '');
+  const pswdExpect = unStr.slice(0, 1) + unStr.length;
+  const pswdCorrect = (pswdReceived === pswdExpect);
+  console.debug(logPrefix, 'checkLogin:', {
+    username,
+    pswdExpect,
+    pswdReceivedLen: pswdReceived.length,
+    pswdCorrect,
+  });
+  return (pswdCorrect && { id: username });
+}
+
+
+const legacyCallbacks = mapValues({
+  checkLogin,
+  parseJson(json) { return JSON.parse(json); },
+  jsonify(data) { return JSON.stringify(data); },
+}, callbackify);
+
 
 
 function findUserId(req) { return ((req.user || false).id || ''); }
@@ -26,22 +53,13 @@ function getLoginOrLogout(which, req, resp) {
 module.exports = class AuthPlain extends AuthBase {
 
   constructor(...args) {
-    super(...args)
+    super(...args);
+    // const [authConfig] = args;
 
     const LocalStrategy = require('passport-local').Strategy
-
-    passport.use(new LocalStrategy(function(username, password, done) {
-      // // TODO this is a giant hack of course
-      // if (username === 'john') return done(null, {id: username})
-      // return password === 'anno'
-      //   ? done(null, {id: username})
-      //   : done(null, false, noSuchUser(username))
-      // XXX TODO WARNING this is a wide open stupid security no-no!
-      return done(null, {id: username})
-    }))
-
-    passport.serializeUser((user, cb) => cb(null, JSON.stringify(user)))
-    passport.deserializeUser((userJSON, cb) => cb(null, JSON.parse(userJSON)) )
+    passport.use(new LocalStrategy(legacyCallbacks.checkLogin));
+    passport.serializeUser(legacyCallbacks.jsonify);
+    passport.deserializeUser(legacyCallbacks.parseJson);
 
     this.router.use(passport.initialize())
     this.router.use(passport.session())

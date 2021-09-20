@@ -11,7 +11,7 @@ const authRouter = require('./routes/auth');
 
 async function setupExpress() {
   const config = envyConf('ANNO', defaultConfig);
-  console.debug('Config:', JSON.stringify(config, null, 2));
+  console.debug('Config:', config);
   const port = (+config.AUTH_PORT || 0);
   if (port < 1) { throw new RangeError('Unsupported port number: ' + port); }
 

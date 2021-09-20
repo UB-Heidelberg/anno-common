@@ -32,7 +32,7 @@ Your Friendly Anno-Mailer`
 module.exports =
   class AuthBase {
 
-    constructor(router=express.Router()) {
+    constructor(config, router=express.Router()) {
       this.router = router
       ;[
         'determineUser',
