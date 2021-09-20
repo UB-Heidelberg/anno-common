@@ -2,7 +2,8 @@
 'use strict';
 
 function addAccessPolicyHeaders(req, resp, next) {
-  resp.header('Access-Control-Allow-Origin', req.get('Origin'));
+  const origin = req.get('Origin');
+  resp.header('Access-Control-Allow-Origin', (origin || '*'));
   resp.header('Access-Control-Allow-Headers', [
     'Authorization',
     'Content-Type',
