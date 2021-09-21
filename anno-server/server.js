@@ -1,110 +1,110 @@
-const express = require('express')
-const async = require('async')
-const {envyConf} = require('envyconf')
-const fs = require('fs')
-const errorHandler = require('./middleware/error-handler')()
-const bodyParser = require('body-parser')
-const morgan = require('morgan')
+// -*- coding: utf-8, tab-width: 2 -*-
+'use strict';
 
-envyConf('ANNO', {
-    LOGLEVEL: 'debug',
-    PORT: '33321',
-    BASE_URL: 'http://localhost:33321/',
-    BASE_PATH: '',
-    STORE: '@kba/anno-store-file',
-    DIST_DIR: __dirname + '/public',
-    ENABLE_JWT_AUTH: 'true',
-})
+require('p-fatal');
 
-function start(app, cb) {
+const express = require('express');
+const { envyConf } = require('envyconf');
+const fs = require('fs');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const pProps = require('p-props');
+const pify = require('pify');
+const absPath = require('absdir')(module, '.');
 
-    const ENABLE_JWT_AUTH = envyConf('ANNO')
+const annoStoreLoader = require('@kba/anno-store');
+const annoPluginsLoader = require('@kba/anno-util-loaders');
 
-    app.set('trust proxy', 'loopback')
+const annoRouteFactory = require('./routes/anno');
+const swaggerRouteFactory = require('./routes/swagger');
 
-    app.use(bodyParser.json({
-      type: '*/*',
-      limit: 16 * 1024 * 1024,
-    }))
-
-    app.use(morgan('short', {
-        skip: (req, res) => {
-            return req.method === 'OPTIONS' || req.originalUrl === '/anno/acl'
-        }
-    }))
+const middlewareFactories = {
+  /* eslint-disable global-require */
+  annoOptions:      require('./middleware/anno-options.js'),
+  userAuth:         require('./middleware/user-auth.js'),
+  aclMetadata:      require('./middleware/acl-metadata.js'),
+  cors:             require('./middleware/cors.js'),
+  errorHandler:     require('./middleware/error-handler.js'),
+  /* eslint-enable global-require */
+};
 
 
-    const store = require('@kba/anno-store').load({
-        loadingModule: module,
-        loadPlugins: require('@kba/anno-util-loaders').loadPlugins,
-    })
-
-    const middlewares = [
-        'anno-options',
-        'user-auth',
-        'acl-metadata',
-        'cors',
-    ]
-
-    async.map(middlewares, (middleware, doneMiddleware) => {
-        console.log(`Loading middleware ${middleware}`)
-        require(`./middleware/${middleware}`)(doneMiddleware)
-    }, (err, [
-        annoOptions,
-        userAuth,
-        aclMetadata,
-        cors,
-    ]) => {
-        if (err)
-            return cb(err)
-        app.use(cors)
-
-        // Static files
-        app.use('/dist', (req, resp, next) => {
-          resp.header('Access-Control-Allow-Origin', '*')
-          next()
-        }, express.static(envyConf('ANNO').DIST_DIR))
-
-        store.init(err => {
-            if (err) return cb(err)
-
-            const annoMiddlewares = []
-            annoMiddlewares.push(annoOptions.unless({method:'OPTIONS'}))
-            if (ENABLE_JWT_AUTH) annoMiddlewares.push(userAuth.unless({method:'OPTIONS'}))
-            annoMiddlewares.push(aclMetadata.unless({method:'OPTIONS'}))
-
-            app.use('/anno', ...annoMiddlewares, require('./routes/anno')({store}))
-
-            app.use('/swagger', require('./routes/swagger')())
-
-            app.get('/favicon.ico', (req, resp, next) => {
-                fs.readFile(`${__dirname}/public/favicon.ico`, (err, ico) => {
-                    if (err) return next(err)
-                    resp.header('Content-Type', 'image/x-icon')
-                    return resp.send(ico)
-                })
-            })
-
-            // Fallback for GET: Redirect /:id to /anno/:id for pretty short URL
-            app.get('/:id', (req, resp, next) => {
-                resp.header('Location', `anno/${req.params.id}`)
-                resp.status(302)
-                resp.end()
-            })
-
-            app.use(errorHandler)
-            return cb()
-        })
-    })
+async function prepareMiddlewares(factory, mwName) {
+  console.info('Init middleware:', mwName);
+  const mware = await factory();
+  return mware;
 }
 
-const app = express()
-start(app, (err) => {
-    // console.log("Config", JSON.stringify(envyConf('ANNO'), null, 2))
-    if (err) throw err
-    app.listen(envyConf('ANNO').PORT, () => {
-        console.log("Config", JSON.stringify(envyConf('ANNO'), null, 2))
-        console.log(`Listening on port ${envyConf('ANNO').PORT}`)
-    })
-})
 
+const envConfig = envyConf('ANNO', {
+  LOGLEVEL: 'debug',
+  PORT: '33321',
+  BASE_URL: 'http://localhost:33321/',
+  BASE_PATH: '',
+  STORE: '@kba/anno-store-file',
+  DIST_DIR: absPath('public'),
+  ENABLE_JWT_AUTH: 'true',
+  REQUEST_PAYLOAD_MAX_SIZE_MIBIBYTES: '16',
+});
+console.info('Anno server envConfig:', envConfig);
+
+
+async function startServer() {
+  console.debug({ envConfig });
+  const app = express();
+  app.set('trust proxy', 'loopback');
+
+  app.use(bodyParser.json({
+    type: '*/*',
+    limit: ((+envConfig.REQUEST_PAYLOAD_MAX_SIZE_MIBIBYTES
+      || 16) * 1024 * 1024),
+  }));
+
+  app.use(morgan('short', {
+    // eslint-disable-next-line no-unused-vars
+    skip(req, res) {
+      return ((req.method === 'OPTIONS')
+        || (req.originalUrl === '/anno/acl'));
+    },
+  }));
+
+  console.info('Init store:');
+  const store = annoStoreLoader.load({
+    loadingModule: module,
+    loadPlugins: annoPluginsLoader.loadPlugins,
+  });
+  await pify(cb => store.init(cb))();
+  console.info('Store ready.');
+
+  const middlewares = await pProps(middlewareFactories, prepareMiddlewares);
+  app.use(middlewares.cors);
+
+  const serveStaticFiles = express.static(envConfig.DIST_DIR);
+  app.use('/dist', serveStaticFiles);
+  app.use('/favicon.ico', serveStaticFiles);
+
+  const annoRouteMiddlewares = [
+    middlewares.annoOptions,
+    (envConfig.ENABLE_JWT_AUTH && middlewares.userAuth),
+    middlewares.aclMetadata,
+  ].filter(Boolean).map(mw => mw.unless({ method:'OPTIONS' }));
+  const annoRoute = annoRouteFactory({ store });
+  app.use('/anno', ...annoRouteMiddlewares, annoRoute);
+
+  const swaggerRoute = swaggerRouteFactory();
+  app.use('/swagger', swaggerRoute);
+
+  // Fallback for GET: Redirect /:id to /anno/:id for pretty short URL
+  // eslint-disable-next-line no-unused-vars
+  app.get('/:id', (req, resp, next) => {
+    resp.header('Location', `anno/${req.params.id}`);
+    resp.status(302);
+    resp.end();
+  });
+
+  app.use(middlewares.errorHandler);
+  await pify(cb => app.listen(envConfig.PORT, cb))();
+  console.info('Anno server listening on port', envConfig.PORT);
+}
+
+startServer();

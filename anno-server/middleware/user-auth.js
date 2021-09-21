@@ -44,5 +44,5 @@ module.exports = function UserAuthMiddlewareFactory(cb) {
         })
     }
     UserAuthMiddleware.unless = require('express-unless')
-    return cb(null, UserAuthMiddleware)
+    return UserAuthMiddleware;
 }

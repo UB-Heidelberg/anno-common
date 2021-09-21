@@ -1,8 +1,12 @@
+// -*- coding: utf-8, tab-width: 2 -*-
+'use strict';
+
+const pify = require('pify');
 const {envyConf, envyLog} = require('envyconf')
 const {truthy} = require('@kba/anno-util')
 const {loadPlugins} = require('@kba/anno-util-loaders')
 
-module.exports = function AnnoOptionsMiddleware(cb) {
+function AnnoOptionsMiddlewareFactory(cb) {
     const log = envyLog('ANNO', 'options-mw')
     const conf = envyConf('ANNO', {
         DEFAULT_COLLECTION: 'default',
@@ -111,6 +115,7 @@ module.exports = function AnnoOptionsMiddleware(cb) {
             loaded()
         }
     }, cb(null, AnnoOptionsMiddleware))
-
-    return AnnoOptionsMiddleware
 }
+
+
+module.exports = pify(AnnoOptionsMiddlewareFactory);

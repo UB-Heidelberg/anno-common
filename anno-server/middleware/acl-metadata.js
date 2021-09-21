@@ -1,3 +1,7 @@
+// -*- coding: utf-8, tab-width: 2 -*-
+'use strict';
+
+const pify = require('pify');
 const errors = require('@kba/anno-errors')
 const jwt = require('jsonwebtoken')
 const axios = require('axios')
@@ -21,7 +25,7 @@ function cached(metadataEndpoint, collection, context, cb) {
 }
 
 
-module.exports = function AclMetadataMiddlewareFactory(cb) {
+function AclMetadataMiddlewareFactory(cb) {
     function AclMetadataMiddleware(req, resp, next) {
         const {collection, collectionConfig} = req.annoOptions = req.annoOptions || {}
         if (!collectionConfig) {
@@ -67,3 +71,5 @@ module.exports = function AclMetadataMiddlewareFactory(cb) {
     return cb(null, AclMetadataMiddleware)
 }
 
+
+module.exports = pify(AclMetadataMiddlewareFactory);

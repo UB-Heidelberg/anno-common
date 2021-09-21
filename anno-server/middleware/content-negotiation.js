@@ -1,6 +1,9 @@
+// -*- coding: utf-8, tab-width: 2 -*-
+'use strict';
+
 const jsonldRapper = require('jsonld-rapper')
 
-module.exports = () => {
+function factory() {
     const j2r = new jsonldRapper()
     return (req, resp, next) => {
         const accept = req.header('Accept') || ''
@@ -14,3 +17,5 @@ module.exports = () => {
         }
     }
 }
+
+module.exports = factory;
