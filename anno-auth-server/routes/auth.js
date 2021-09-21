@@ -6,12 +6,12 @@ const cookieParser        = require('cookie-parser')
 const expressSession      = require('express-session')
 const morgan              = require('morgan')
 
-const addAccessPolicyHeaders = require('../src/addAccessPolicyHeaders.js');
+const addCorsHeaders = require('../../anno-server/middleware/cors.js')();
 
 module.exports = function createAuthRoute(authConfig) {
   const app = express.Router()
   app.use(morgan('dev'))
-  app.use(addAccessPolicyHeaders);
+  app.use(addCorsHeaders);
   app.use(cookieParser())
   app.use(expressSession({
     secret: authConfig.sessionMasterKey,
