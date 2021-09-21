@@ -15,14 +15,16 @@ function install_cli () {
 
   check_missing_os_packages || return $?
   vdo update_git_submodules || return $?
+  verify_npm_version || return $?
 
-  echo "D: npm install monorepo @ $PWD:"
-  v_npm_install_current_directory || return $?
-  maybe_prepare_pkglock_for_lerna || return $?
+  echo "D: npm install monorepo:"
+  npm install . || return $?$(echo "E: npm failed, rv=$?" >&2)
+  # maybe_prepare_pkglock_for_lerna || return $?
   # symlink_sanity_checks || return $?
 
-  echo "D: lerna bootstrap @ $PWD:"
-  npm run sh lerna bootstrap --no-ci || return $?
+  # echo "D: lerna bootstrap @ $PWD:"
+  # npm run sh lerna bootstrap --no-ci || return $?
+  v_npm_subpkgs install . || return $?
 }
 
 
@@ -119,23 +121,29 @@ function maybe_prepare_pkglock_for_lerna () {
 }
 
 
-function v_npm_install_current_directory () {
-  echo; echo
-  echo "Current working directory is $PWD"
-
+function verify_npm_version () {
   local NPM_VERSION="$(npm --version)"
   local NPM_MAJOR_VERSION="${NPM_VERSION%%.*}"
   [ "$NPM_MAJOR_VERSION" -ge 7 ] || return 4$(
     echo "E: npm --version reports '$NPM_VERSION'," \
       "but we need npm v7 or later to make lerna work." >&2)
+}
 
-  #  echo; echo "=== ls node_modules ==="
-  #  ls -alF "$PWD/node_modules"
-  #  echo; echo "=== ls . ==="
-  #  ls -alF .
-  #  echo; echo "=== npm install ==="
-  npm install . || return $?$(echo "E: npm install failed, rv=$?" >&2)
-  echo; echo
+
+function v_npm_subpkgs () {
+  for SUB in [a-z]*/package.json; do
+    SUB="${SUB%/*}"
+    v_npm_subpkgs__each "$SUB" "$@" &
+    wait || return $?
+  done
+}
+
+
+function v_npm_subpkgs__each () {
+  local SUB="$1"; shift
+  cd -- "$SUB" || return $?
+  echo "D: npm subpkg $SUB: $*"
+  npm "$@" || return $?$(echo "E: npm failed, rv=$?" >&2)
 }
 
 
