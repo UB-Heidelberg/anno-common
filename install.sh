@@ -50,7 +50,8 @@ function smart_symlink_to () {
   mkdir --parents -- "$(dirname -- "$LINK")"
   ln --symbolic --no-target-directory -- "$DEST" "$LINK" || return $?
   echo
-  ls -ldF --color=always -- "$LINK" "$DEST"
+  ls -ldF --color=always -- "$LINK"
+  ls -ldF --color=always -- "$DEST" 2>/dev/null
   echo
 }
 
