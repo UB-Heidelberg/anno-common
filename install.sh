@@ -121,6 +121,13 @@ function maybe_prepare_pkglock_for_lerna () {
 function v_npm_install_current_directory () {
   echo; echo
   echo "Current working directory is $PWD"
+
+  local NPM_VERSION="$(npm --version)"
+  local NPM_MAJOR_VERSION="${NPM_VERSION%%.*}"
+  [ "$NPM_MAJOR_VERSION" -ge 7 ] || return 4$(
+    echo "E: npm --version reports '$NPM_VERSION'," \
+      "but we need npm v7 or later to make lerna work." >&2)
+
   #  echo; echo "=== ls node_modules ==="
   #  ls -alF "$PWD/node_modules"
   #  echo; echo "=== ls . ==="
