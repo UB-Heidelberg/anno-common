@@ -45,6 +45,7 @@ const envConfig = envyConf('ANNO', {
   DIST_DIR: absPath('public'),
   ENABLE_JWT_AUTH: 'true',
   REQUEST_PAYLOAD_MAX_SIZE_MIBIBYTES: '16',
+  TEST_FX: '',
 });
 console.info('Anno server envConfig:', envConfig);
 
@@ -103,8 +104,13 @@ async function startServer() {
   });
 
   app.use(middlewares.errorHandler);
-  await pify(cb => app.listen(envConfig.PORT, cb))();
-  console.info('Anno server listening on port', envConfig.PORT);
+  const lsnPort = envConfig.PORT;
+  await pify(cb => app.listen(lsnPort, cb))();
+  console.info('Anno server listening on port', lsnPort);
+  if (envConfig.TEST_FX === 'abort_when_listening') {
+    console.log('TEST_FX: Scheduling exit');
+    setTimeout(() => process.exit(0), 500);
+  }
 }
 
 startServer();
