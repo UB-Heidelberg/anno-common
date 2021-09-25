@@ -1,4 +1,4 @@
-# anno
+# anno-common
 
 [![Build Status](https://travis-ci.org/kba/anno-common.svg?branch=master)](https://travis-ci.org/kba/anno-common)
 [![Known Vulnerabilities](https://snyk.io/test/github/kba/anno-common/badge.svg?targetFile=anno-server%2Fpackage.json)](https://snyk.io/test/github/kba/anno-common?targetFile=anno-server%2Fpackage.json)
