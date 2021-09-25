@@ -1,12 +1,12 @@
 MAKEFLAGS += --no-print-directory --silent
-PATH := ./node_modules/.bin:$(PATH)
+PATH := "$(PWD)/node_modules/.bin:$(PATH)"
 MKDIR = mkdir -p
 RM = rm -rf
 
 export SHLOG_TERM=info
 
 # Directory for temporary data. Default: '$(TEMPDIR)'
-TEMPDIR = $(PWD)/temp
+TEMPDIR = "$(PWD)/temp"
 
 # TAP reporter to use. Default "$(REPORTER)". One of
 #   classic doc dot dump json jsonstream
