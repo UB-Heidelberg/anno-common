@@ -4,8 +4,15 @@ const fs = require('fs')
 const fixtures = require('@kba/anno-fixtures')
 
 tap.test('smoketest', t => {
-    t.equals(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')
-    t.equals(Object.keys(schema.validate).length, 34, '34 classes in schema')
+    t.equal(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')
+    t.equal(Object.keys(schema.validate).length, 34, '34 classes in schema')
+    t.end()
+})
+
+tap.test('jsonldContext', t => {
+    const jc = schema.jsonldContext;
+    t.same(Object.keys(jc), ['@context']);
+    t.same(jc['@context'][0], 'http://www.w3.org/ns/anno.jsonld');
     t.end()
 })
 
@@ -39,7 +46,7 @@ if (process.env.FIXTURE) {
 
 tap.test('openapi respects config', t => {
     process.env.ANNO_OPENAPI_HOST = 'example.org'
-    t.equals(schema.openapi.host, process.env.ANNO_OPENAPI_HOST, 'OPENAPI_HOST')
-    t.equals(schema.openapi.basePath, process.env.ANNO_OPENAPI_BASEPATH, 'OPENAPI_BASEPATH')
+    t.equal(schema.openapi.host, process.env.ANNO_OPENAPI_HOST, 'OPENAPI_HOST')
+    t.equal(schema.openapi.basePath, process.env.ANNO_OPENAPI_BASEPATH, 'OPENAPI_BASEPATH')
     t.end()
 })
