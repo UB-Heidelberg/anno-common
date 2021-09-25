@@ -37,6 +37,10 @@ test(StoreConstructor.name, async t => {
 
   await (async function coverageTestEdgeCases() {
     const PT = StoreConstructor.prototype;
+    await pify(done => PT._init.call({
+      db: { loadDatabase(next) { next(); } }
+    }, done))();
+
     const ctx = {
       dbfilename: 'dummy',
       fs: { unlink(path, unlCb) { unlCb({ name: 'ERR_EXOTIC', path }); } },

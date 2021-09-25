@@ -20,11 +20,10 @@ class FileStore extends Store {
     }
 
     _init(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
-        this.db.loadDatabase(err => {
-            if (err) return cb(err)
-            return cb()
-        })
+        if (typeof options === 'function') {
+          [cb, options] = [options, {}];
+        }
+        this.db.loadDatabase(cb);
     }
 
     _wipe(options, cb) {
