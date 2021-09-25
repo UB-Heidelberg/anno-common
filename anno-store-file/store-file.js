@@ -1,5 +1,6 @@
 const nedb = require('nedb')
 const fs = require('fs')
+const callbackify = require('callbackify')
 const Store = require('@kba/anno-store-mongolike')
 const {envyConf,envyLog} = require('envyconf')
 
@@ -28,10 +29,11 @@ class FileStore extends Store {
 
     _wipe(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        fs.unlink(this.dbfilename, err => {
+        const self = this;
+        (self.fs || fs).unlink(self.dbfilename, err => {
             if (err && err.code !== 'ENOENT')
                 return cb(err)
-            return this.init(options, cb)
+            return self.init(options, cb)
         })
     }
 

@@ -4,8 +4,7 @@
   "description": "Open Annotation nedb store",
   "main": "store-file.js",
   "scripts": {
-    "tap": "tap *.test.js",
-    "test": "echo 'W: skip: bug ubhd#35' >&2"
+    "test": "tap *.test.js"
   },
   "author": "kba",
   "license": "MIT",
@@ -14,6 +13,7 @@
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-file#readme",
   "dependencies": {
     "@kba/anno-store-mongolike": "file:../anno-store-mongolike/",
+    "callbackify": "^1.1.0",
     "envyconf": "^0.0.7",
     "nedb": "^1.8.0"
   }
