@@ -15,5 +15,8 @@
   },
   "devDependencies": {
     "@kba/anno-fixtures": "file:../anno-fixtures/"
+  },
+  "scripts": {
+    "test": "echo 'W: No real tests yet.' >&2"
   }
 }

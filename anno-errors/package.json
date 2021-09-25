@@ -4,7 +4,7 @@
   "description": "Error conditions for anno",
   "main": "errors.js",
   "scripts": {
-    "test": "tap *.test.js"
+    "test": "echo 'W: No real tests yet.' >&2"
   },
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",

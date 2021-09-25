@@ -7,6 +7,7 @@
     "fixtures": "webpack -p --config webpack.config.fixtures.js",
     "dev": "webpack -d",
     "min": "webpack -p",
+    "test": "echo 'W: No real tests yet.' >&2",
     "watch": "webpack -w -d"
   },
   "author": "kba",

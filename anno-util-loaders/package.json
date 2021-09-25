@@ -7,7 +7,7 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-util-loaders#readme",
   "scripts": {
-    "test": "tap *.test.js"
+    "test": "echo 'W: No real tests yet.' >&2"
   },
   "author": "kba",
   "license": "MIT",

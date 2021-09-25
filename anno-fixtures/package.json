@@ -8,7 +8,8 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-fixtures#readme",
   "scripts": {
-    "rebuild": "make index.json"
+    "rebuild": "make index.json",
+    "test": "echo 'W: No real tests yet.' >&2"
   },
   "author": "kba",
   "license": "MIT",

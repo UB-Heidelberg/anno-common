@@ -4,7 +4,7 @@
   "description": "Open Annotation Store (base class)",
   "main": "store.js",
   "scripts": {
-    "test": "tap *.test.js"
+    "test": "tap *-test.js"
   },
   "author": "kba",
   "license": "MIT",

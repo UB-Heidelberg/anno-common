@@ -11,7 +11,7 @@
     "anno": "cli.js"
   },
   "scripts": {
-    "test": "echo no test"
+    "test": "echo 'W: No real tests yet.' >&2"
   },
   "dependencies": {
     "@kba/anno-queries": "file:../anno-queries/",
