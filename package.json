@@ -1,11 +1,9 @@
-{
+{ "name": "anno",
   "private": true,
-  "name": "anno",
   "scripts": {
     "sh": "\"$@\"",
     "bootstrap": "./install.sh",
-    "link-all": "lerna exec npm link",
-    "docker": "docker build -t kbai/anno -f Dockerfile ."
+    "test": "npm-ci-utils-pmb each_subpkg npm test"
   },
   "cacheDirectories": [
     "node_modules",
@@ -36,6 +34,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "lerna": "^4.0.0",
+    "npm-ci-utils-pmb": "^0.0.3",
     "safeload-yaml-pmb": "^4.210519.0",
     "tap": "^15.0.9"
   }
