@@ -1,21 +1,9 @@
-lerna-debug.log
-node_modules
-/temp
-*.nedb
-fixtures
-**/npm-debug.log
-**/npm-debug.log.*
-/dist
-anno-webpack/dist
-gh-pages
-*.ignore
-ignore.*
-*~
-anno-docker
-.~*
-anno-webpack/deploy.mk
-site
-doc/assets/dist
-doc/context.jsonld
-doc/openapi.json
-deploy.mk
+
+# Generated files
+**/.nyc_output
+**/node_modules
+**/package-lock.json
+
+
+
+# Unsorted additions (this section should be empty):

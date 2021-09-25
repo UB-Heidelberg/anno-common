@@ -1,8 +1,7 @@
 
 # Generated files
 # in addition to those from ../.gitignore
-/*.nedb
-/*.sqlite
+/dist
 
 
 
