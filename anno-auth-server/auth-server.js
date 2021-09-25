@@ -1,3 +1,5 @@
+// -*- coding: utf-8, tab-width: 2 -*-
+'use strict';
 
 require('p-fatal');
 
@@ -8,21 +10,19 @@ const defaultConfig = require('./cfg.defaults.js');
 const decideAuthRouterConfig = require('./src/decideAuthRouterConfig');
 const fallbackErrorHandler = require('./src/fallbackErrorHandler');
 const authRouter = require('./routes/auth');
+const expressAppUtils = require('../anno-server/src/expressAppUtils.js');
 
 async function setupExpress() {
-  const config = envyConf('ANNO', defaultConfig);
-  console.debug('Config:', config);
-  const port = (+config.AUTH_PORT || 0);
-  if (port < 1) { throw new RangeError('Unsupported port number: ' + port); }
-
-  const authRouterConfig = await decideAuthRouterConfig(config);
+  const envConfig = envyConf('ANNO', defaultConfig);
+  console.debug('Config:', envConfig);
+  const authRouterConfig = await decideAuthRouterConfig(envConfig);
 
   const app = express();
   app.set('views', `${__dirname}/views`);
   app.set('view engine', 'pug');
   app.use(authRouter(authRouterConfig));
   app.use(fallbackErrorHandler);
-  app.listen(port, () => console.log(`Listening on port ${port}`));
+  await expressAppUtils.listenNow(app, envConfig);
 }
 
 setupExpress();

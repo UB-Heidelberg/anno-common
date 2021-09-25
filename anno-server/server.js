@@ -17,6 +17,7 @@ const annoPluginsLoader = require('@kba/anno-util-loaders');
 
 const annoRouteFactory = require('./routes/anno');
 const swaggerRouteFactory = require('./routes/swagger');
+const expressAppUtils = require('./src/expressAppUtils.js');
 
 const middlewareFactories = {
   /* eslint-disable global-require */
@@ -104,13 +105,7 @@ async function startServer() {
   });
 
   app.use(middlewares.errorHandler);
-  const lsnPort = envConfig.PORT;
-  await pify(cb => app.listen(lsnPort, cb))();
-  console.info('Anno server listening on port', lsnPort);
-  if (envConfig.TEST_FX === 'abort_when_listening') {
-    console.log('TEST_FX: Scheduling exit');
-    setTimeout(() => process.exit(0), 500);
-  }
+  await expressAppUtils.listenNow(app, envConfig);
 }
 
 startServer();
