@@ -33,6 +33,7 @@ jobs:
                 mongodb-version: 3.6
 
             - run: 'make bootstrap-test'
+            - run: 'npm test'
             - run: 'make test-all'
 
 ...
