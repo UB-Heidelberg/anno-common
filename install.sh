@@ -14,7 +14,7 @@ function install_cli () {
   esac
 
   check_missing_os_packages || return $?
-  vdo update_git_submodules || return $?
+  # vdo update_git_submodules || return $?
   verify_npm_version || return $?
 
   echo "D: npm install monorepo:"

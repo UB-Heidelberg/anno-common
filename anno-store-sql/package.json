@@ -18,7 +18,7 @@
     "@kba/anno-schema": "file:../anno-schema/",
     "@kba/anno-store": "file:../anno-store/",
     "@kba/anno-util": "file:../anno-util/",
-    "envyconf": "file:../envyconf/",
+    "envyconf": "^0.0.7",
     "knex": "^0.13.0",
     "knex-cleaner": "1.1.3",
     "objection": "^0.8.9",

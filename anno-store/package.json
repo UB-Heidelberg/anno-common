@@ -16,7 +16,7 @@
     "@kba/anno-schema": "file:../anno-schema/",
     "@kba/anno-util": "file:../anno-util/",
     "async": "^2.3.0",
-    "envyconf": "file:../envyconf/",
+    "envyconf": "^0.0.7",
     "fetch-ponyfill": "4.1.0",
     "slugid": "^1.1.0"
   }

@@ -19,7 +19,7 @@
     "@kba/anno-store": "file:../anno-store/",
     "@kba/anno-store-file": "file:../anno-store-file/",
     "@kba/anno-util": "file:../anno-util/",
-    "envyconf": "file:../envyconf/",
+    "envyconf": "^0.0.7",
     "get-stdin": "^5.0.1",
     "mustache": "^2.3.0",
     "object-prune": "^0.0.4",

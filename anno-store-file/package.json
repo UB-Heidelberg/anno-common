@@ -13,7 +13,7 @@
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-file#readme",
   "dependencies": {
     "@kba/anno-store-mongolike": "file:../anno-store-mongolike/",
-    "envyconf": "file:../envyconf/",
+    "envyconf": "^0.0.7",
     "nedb": "^1.8.0"
   }
 }

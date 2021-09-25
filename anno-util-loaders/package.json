@@ -18,7 +18,7 @@
     "@kba/anno-errors": "file:../anno-errors/",
     "async": "^2.3.0",
     "chokidar": "^1.7.0",
-    "envyconf": "file:../envyconf/",
+    "envyconf": "^0.0.7",
     "safeload-yaml-pmb": "^4.210519.0",
     "strip-bom": "^4.0.0"
   }

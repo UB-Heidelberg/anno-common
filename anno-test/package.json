@@ -21,7 +21,7 @@
     "@kba/anno-store-memory": "file:../anno-store-memory/",
     "@kba/anno-util": "file:../anno-util/",
     "@kba/anno-util-loaders": "file:../anno-util-loaders/",
-    "envyconf": "file:../envyconf/",
+    "envyconf": "^0.0.7",
     "tap": "^11.0.1"
   }
 }

@@ -18,7 +18,7 @@
     "callbackify": "^1.1.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
-    "envyconf": "file:../envyconf/",
+    "envyconf": "^0.0.7",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "getown": "^1.0.0",

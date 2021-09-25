@@ -17,6 +17,6 @@
     "@kba/anno-store": "file:../anno-store/",
     "@kba/anno-util": "file:../anno-util/",
     "async": "^2.3.0",
-    "envyconf": "file:../envyconf/"
+    "envyconf": "^0.0.7"
   }
 }
