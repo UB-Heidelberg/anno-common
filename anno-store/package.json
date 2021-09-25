@@ -4,7 +4,7 @@
   "description": "Open Annotation Store (base class)",
   "main": "store.js",
   "scripts": {
-    "test": "tap *-test.js"
+    "test": "echo 'D: This package has now own tests. It is to be tested indirectly by the other stores.'"
   },
   "author": "kba",
   "license": "MIT",

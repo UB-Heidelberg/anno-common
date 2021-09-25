@@ -2,9 +2,11 @@ process.env.ANNO_BASE_URL = `http://localhost:3000`
 process.env.ANNO_BASE_PATH = ``
 process.env.ANNO_NEDB_DIR = `${__dirname}/../temp`
 
+const StoreTestsFramework = require('../anno-store/store-tests-framework.js');
+
 const store = new(require('.'))()
 require('tap').test(store.constructor.name, async t => {
-  const StoreTests = new(require('../anno-store/store-test'))(store)
+  const StoreTests = new StoreTestsFramework(store);
 
   await StoreTests.store.init()
   await StoreTests.testAll(t)
