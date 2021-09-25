@@ -1,4 +1,24 @@
-const inspect = require('@kba/anno-util/inspect')
+// -*- coding: utf-8, tab-width: 2 -*-
+'use strict';
+/* eslint-disable
+    arrow-parens,
+    block-spacing,
+    brace-style,
+    comma-dangle,
+    import/newline-after-import,
+    import/no-dynamic-require,
+    no-path-concat,
+    no-shadow,
+    object-curly-spacing,
+    padded-blocks,
+    prefer-const,
+    quotes,
+    semi,
+  */
+
+const toCamelCase = require('lodash.camelcase');
+const pProps = require('p-props');
+
 const fixtures = require(__dirname + '/../anno-fixtures')
 const toImport = {
   type: ['Annotation'],
@@ -13,11 +33,21 @@ const toImport = {
   ]
 }
 
-const input1 = fixtures.Annotation.ok['minimal-string-target.json']
+const inputs = {
+  minimalOaTag: {target: 'x://y', body: {type: ['oa:Tag']}},
+};
+
+const targetTypes = [
+  'string',
+  'object',
+  'array',
+];
+targetTypes.forEach(function addTargetTypeInput(tt) {
+  const bfn = `minimal-${tt}-target`;
+  inputs[toCamelCase(bfn)] = fixtures.Annotation.ok[bfn + '.json'];
+});
+
 const newTarget = 'https://foo.example.bar'
-const input2 = fixtures.Annotation.ok['minimal-object-target.json']
-const input3 = fixtures.Annotation.ok['minimal-array-target.json']
-const input4 = {target: 'x://y', body: {type: ['oa:Tag']}}
 
 module.exports = class StoreTests {
 
@@ -47,7 +77,7 @@ module.exports = class StoreTests {
       t.plan(1)
       const {store} = this
 
-      const saved1 = await store.create(input1)
+      const saved1 = await store.create(inputs.minimalStringTarget)
       const revId = `${saved1.id}~1`
       const byRevId = await store.get(revId)
       t.equals(byRevId.id, revId, `get by revision-id: ${revId}`)
@@ -62,29 +92,36 @@ module.exports = class StoreTests {
 
       const {store} = this
 
-      const saved1 = await store.create(input1)
+      const saved1 = await store.create(inputs.minimalStringTarget)
       t.ok(true, 'create worked')
       // t.comment(JSON.stringify(saved, null, 2))
-      t.equals(saved1.target, input1.target, 'target kept (string)')
+      t.equals(saved1.target,
+        inputs.minimalStringTarget.target,
+        'target kept (string)')
 
       const {id} = saved1
       const byId = await store.get(id)
       t.equals(byId.id, id, `get by url: ${id}`)
-      input1.id = byId.id
+      inputs.minimalStringTarget.id = byId.id
 
       try {await store.get('DOES-NOT-EXIST')}
       catch (err) {t.equals(err.code, 404, "DOES-NOT-EXIST isnt found")}
 
-      return Promise.all([
-        store.create(input2),
-        store.create(input3),
-        store.create(input4),
-      ]).then(([saved2, saved3, saved4]) => {
-        t.equals(saved2.target.source, input2.target.source, 'target kept (object)')
-        t.equals(saved3.target[0].source, input3.target[0].source, 'target kept (array of objects)')
-        t.equals(saved4.target, input4.target, 'target kept (string)')
+      const saved2 = await store.create(inputs.minimalObjectTarget);
+      t.equals(saved2.target.source,
+        inputs.minimalObjectTarget.target.source,
+        'target kept (object)')
 
-      }, () => t.end())
+      const saved3 = await store.create(inputs.minimalArrayTarget);
+      t.equals(saved3.target[0].source,
+        inputs.minimalArrayTarget.target[0].source,
+        'target kept (array of objects)')
+
+      const saved4 = await store.create(inputs.minimalOaTag);
+      t.equals(saved4.target, inputs.minimalOaTag.target,
+        'target kept (string)')
+
+      t.end();
     })
   }
 
@@ -97,14 +134,15 @@ module.exports = class StoreTests {
 
       await store.wipe()
       await store.init()
-      await Promise.all([input1, input2, input3, input4].map(i => store.create(i)))
+      await pProps(inputs, (i => store.create(i)))
 
       annos = await store.search()
       // console.log(annos.map(a => a.target))
       t.equals(annos.length, 4, '4 anno in store total')
 
-      annos = await store.search({$target: input1.target})
-      t.equals(annos.length, 3, `search {$target:${input1.target}} -> 3`)
+      annos = await store.search({$target: inputs.minimalStringTarget.target})
+      t.equals(annos.length, 3,
+        `search {$target:${inputs.minimalStringTarget.target}} -> 3`)
 
       // TODO how to serialize this in a GET call?
       // cb => store.search({'target.source': {$in: [oldTarget, newTarget]}}, cb),
@@ -122,7 +160,7 @@ module.exports = class StoreTests {
       t.plan(2)
       const {store} = this
 
-      let saved1 = await store.create(input1)
+      let saved1 = await store.create(inputs.minimalStringTarget)
       let reply = await store.reply(saved1.id, {body: {value: 'Nonsense!'}})
       let saved2 = await store.get(saved1.id)
       t.equals(reply.id, saved1.id + '.1', 'URL has .1 added')
@@ -137,7 +175,7 @@ module.exports = class StoreTests {
       t.plan(3)
       const {store} = this
 
-      let saved1 = await store.create(input1)
+      let saved1 = await store.create(inputs.minimalStringTarget)
       const target = newTarget
       const revised1 = await store.revise(saved1.id, Object.assign(saved1, {target}))
       const revId = `${saved1.id}~2`
@@ -157,7 +195,11 @@ module.exports = class StoreTests {
 
       await store.wipe()
       await store.init()
-      const [saved1, saved2] = await Promise.all([input1, input2, input3, input4].map(i => store.create(i)))
+      const saved1 = await store.create(inputs.minimalStringTarget);
+      const saved2 = await store.create(inputs.minimalObjectTarget);
+      // :TODO: Are the next both even required?
+      await store.create(inputs.minimalArrayTarget);
+      await store.create(inputs.minimalOaTag);
 
       let annos = await store.search()
       t.equals(annos.length, 4, '4 annos before delete')
