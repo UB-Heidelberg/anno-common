@@ -1,17 +1,32 @@
-image: node:8
+%YAML 1.2
+# -*- coding: UTF-8, tab-width: 4 -*-
+---
+
+image: node:12
 
 stages:
   - test
 
 before_script:
   - sudo apt install raptor2-utils mongodb-server
-  - npm install
-  - make bootstrap-test
+  - ./install.sh
 
 test:
   stage: test
   script:
+    - make bootstrap-test
+    - npm test
     - make test-all
   cache:
     paths:
-    - node_modules/
+      - node_modules/
+
+
+
+
+
+
+
+
+
+...

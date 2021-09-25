@@ -14,17 +14,11 @@ function install_cli () {
   esac
 
   check_missing_os_packages || return $?
-  # vdo update_git_submodules || return $?
   verify_npm_version || return $?
 
   echo "D: npm install monorepo:"
   npm install . || return $?$(echo "E: npm failed, rv=$?" >&2)
-  # maybe_prepare_pkglock_for_lerna || return $?
-  # symlink_sanity_checks || return $?
-
-  # echo "D: lerna bootstrap @ $PWD:"
-  # npm run sh lerna bootstrap --no-ci || return $?
-  v_npm_subpkgs install . || return $?
+  npm run each_subpkg npm install . || return $?
 }
 
 
@@ -34,15 +28,6 @@ function vdo () { echo -n "D: $*: "; "$@"; }
 function check_missing_os_packages () {
   vdo rapper --version || return 3$(
     echo "E: Please apt-get install raptor2-utils" >&2)
-}
-
-
-function update_git_submodules () {
-  git submodule update --init \
-    --recursive \
-    --jobs 16 \
-    || return $?
-  echo "D: updated git submodules."
 }
 
 
@@ -93,10 +78,6 @@ function maybe_prepare_pkglock_for_lerna () {
   [ "$CI" == true ] || return 0
   # internally_symlinkify_kba_deps || return $?
 
-  local NPM_VER="$(npm --version)"
-  [ "${NPM_VER%%.*}" -ge 7 ] || warnbox "npm too old." \
-    "$FUNCNAME will probably fail."
-
   local SLY="$SELFPATH/node_modules/safeload-yaml-pmb"
   [ -d "$SLY" ] || warnbox "Not yet installed: $SLY" \
     "Try installing the monorepo toplevel package first."
@@ -129,22 +110,6 @@ function verify_npm_version () {
       "but we need npm v7 or later to make lerna work." >&2)
 }
 
-
-function v_npm_subpkgs () {
-  for SUB in [a-z]*/package.json; do
-    SUB="${SUB%/*}"
-    v_npm_subpkgs__each "$SUB" "$@" &
-    wait || return $?
-  done
-}
-
-
-function v_npm_subpkgs__each () {
-  local SUB="$1"; shift
-  cd -- "$SUB" || return $?
-  echo "D: npm subpkg $SUB: $*"
-  npm "$@" || return $?$(echo "E: npm failed, rv=$?" >&2)
-}
 
 
 

@@ -1,8 +1,9 @@
 { "name": "anno",
   "private": true,
   "scripts": {
-    "sh": "\"$@\"",
     "bootstrap": "./install.sh",
+    "each_subpkg": "npm-ci-utils-pmb each_subpkg \"$@\"",
+    "sh": "\"$@\"",
     "test": "npm-ci-utils-pmb each_subpkg npm test"
   },
   "cacheDirectories": [
