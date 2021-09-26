@@ -7,8 +7,8 @@ const smartListen = require('net-smartlisten-pmb');
 
 const eau = {
 
-  async listenNow(app, envConfig) {
-    const lsnSpec = smartListen(envConfig.PORT);
+  async listenNow(app, envConfig, envPrefix) {
+    const lsnSpec = smartListen(envConfig[(envPrefix || '') + 'PORT']);
     await pify(cb => app.listen(lsnSpec, cb))();
     console.info('Listening on ' + lsnSpec);
     if (envConfig.TEST_FX === 'abort_when_listening') {

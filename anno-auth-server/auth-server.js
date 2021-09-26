@@ -22,7 +22,7 @@ async function setupExpress() {
   app.set('view engine', 'pug');
   app.use(authRouter(authRouterConfig));
   app.use(fallbackErrorHandler);
-  await expressAppUtils.listenNow(app, envConfig);
+  await expressAppUtils.listenNow(app, envConfig, 'AUTH_');
 }
 
 setupExpress();

@@ -8,9 +8,9 @@ function test_all () {
   cd -- "$SELFPATH"/.. || return $?
 
   local SOCK=
-  if [ -z "$ANNO_PORT" ]; then
+  if [ -z "$ANNO_AUTH_PORT" ]; then
     SOCK="/tmp/anno.$$.sock"
-    export ANNO_PORT="$SOCK"
+    export ANNO_AUTH_PORT="$SOCK"
     [ ! -S "$SOCK" ] || rm --verbose -- "$SOCK" || return $?
   fi
 
