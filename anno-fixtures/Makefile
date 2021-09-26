@@ -1,9 +1,9 @@
 # Directory for temporary data. Default: $(TEMPDIR)
-TEMPDIR ?= ../temp
+TEMPDIR ?= node_modules/.test-tmp
 
 MKDIR = mkdir -p
 
-WPT_REPO = $(TEMPDIR)/web-platform-tests
+WPT_REPO = $(TEMPDIR)/w3c-web-platform-tests
 
 # BEGIN-EVAL makefile-parser --make-help Makefile
 
