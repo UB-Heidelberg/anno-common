@@ -1,6 +1,10 @@
-PATH:=./node_modules/.bin:$(PATH)
+PATH := ./node_modules/.bin:$(PATH)
+
+TMP_DIR := test.tmp
+DB_FILE := ${TMP_DIR}/example.sqlite3
 
 # Migrate to latest schema
 start:
-	-rm ../temp/example.sqlite3
-	./node_modules/.bin/knex migrate:latest
+	mkdir --parents -- "${TMP_DIR}"
+	[ ! -e "${DB_FILE}" ] || rm -- "${DB_FILE}"
+	DB_FILE="${DB_FILE}" ./node_modules/.bin/knex migrate:latest
