@@ -92,11 +92,6 @@ module.exports =
         secure: SMTP_SECURE, // secure:true for port 465, secure:false for port 587
       })
 
-      // XXX
-      // XXX giant hack for the sake of debugging.
-      // XXX
-      this.router.get('/test', (req, resp) => resp.send(req.headers))
-
       //
       // GET /auth/login
       // POST /auth/login
