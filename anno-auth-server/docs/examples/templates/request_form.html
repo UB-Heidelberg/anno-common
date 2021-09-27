@@ -1,0 +1,37 @@
+<meta charset="UTF-8">
+
+<style type="text/css">
+  .thin { font-weight: normal; }
+  .hint-required { color: red; }
+  input[type="checkbox"]:checked ~ .hint-required { display: none; }
+</style>
+
+<div class="row">
+  <input type="hidden" name="reasons" value="&#10;&#10;GDPR approved: [">
+  <label class="thin">
+    <input type="checkbox" name="reasons" value="x" required>
+    I read and agree to the
+    <a href="/gdpr" target="_blank">data protection statement</a>.
+    <span class="hint-required">(required)</span>
+  </label>
+  <input type="hidden" name="reasons" value="]">
+</div>
+
+<div class="row">
+  <input type="hidden" name="reasons" value="&#10;&#10;Monthly donation: [">
+  <label class="thin">
+    <input type="checkbox" name="reasons" value="x">
+    I promise to contribute a montly donation
+  </label>
+  of at least
+  <input type="hidden" name="reasons" value="] ">
+  <input type="text" name="reasons" size="8" value="20"> €.
+  <input type="hidden" name="reasons" value=" €">
+</div>
+
+<div class="row">
+  <label class="thin"><input type="checkbox" value="should be ignored"
+    name="c_A checkbox masquerading as a collection">
+    I like custom checkboxes masquerading as collection names.
+  </label>
+</div>

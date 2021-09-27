@@ -15,7 +15,7 @@ a user '${displayName}' (Email: ${email}, ID: ${sessUserName}) has requested acc
 
 Reasons given:
 
-${reasons}
+${[].concat(reasons).join('')}
 
 If the user is not yet in the users.yml, add an entry such as this:
 

@@ -25,6 +25,7 @@ block body
 											- checked = collectionsSelected.has(collection)
 											input(type='checkbox',name=`c_${collection}`,checked=checked)
 											= collection
+							.form-group !{TEXT_REQUEST}
 							.form-group
 								button.btn.btn-default(type='submit') Submit
 			else

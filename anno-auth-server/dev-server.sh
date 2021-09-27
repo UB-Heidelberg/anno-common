@@ -12,6 +12,7 @@ function dev_server () {
   export ANNO_COLLECTION_FILE="$ANNO_COMMON_DIR$(
     )/anno-server/example_collections_file.json"
   export ANNO_USER_FILE="$ANNO_COMMON_DIR/anno-plugins/users-example.json"
+  export ANNO_TEXT_REQUEST="$(cat -- docs/examples/templates/request_form.html)"
   exec node auth-server.js
 }
 
