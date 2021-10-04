@@ -1,4 +1,4 @@
-%YAML 1.2
+%YAML 1.1
 # -*- coding: UTF-8, tab-width: 4 -*-
 ---
 
@@ -8,15 +8,17 @@ stages:
   - test
 
 before_script:
-  - sudo apt install raptor2-utils mongodb-server
+  - apt update
+  - apt install --yes raptor2-utils mongodb-server
+  - npm install --global npm@7
   - ./install.sh
 
 test:
   stage: test
   script:
-    - make bootstrap-test
     - npm test
-    - make test-all
+    - npm run sh make bootstrap-test
+    - npm run sh make test-all
   cache:
     paths:
       - node_modules/
