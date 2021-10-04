@@ -11,6 +11,7 @@ before_script:
   - apt update
   - apt install --yes raptor2-utils mongodb-server
   - npm install --global npm@7
+  - npm version
   - ./install.sh
 
 test:
