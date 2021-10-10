@@ -1,48 +1,57 @@
-const tap = require('tap')
-const schema = require('.')
-const fs = require('fs')
-const fixtures = require('@kba/anno-fixtures')
+// -*- coding: utf-8, tab-width: 2 -*-
+'use strict';
 
-tap.test('smoketest', t => {
-    t.equal(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')
-    t.equal(Object.keys(schema.validate).length, 34, '34 classes in schema')
-    t.end()
-})
+const tap = require('tap');
+const schema = require('.');
+const fs = require('fs');
+
+const w3cWptFixtures = require('w3c-wpt-annotation-protocol-fixtures-pmb');
+const localExampleAnnos = require('../anno-test/fixtures/anno.valid.js');
+
+const validateSchema = schema.validate;
+const validateAnno = validateSchema.Annotation;
+
+
+tap.test('Basic integrity', t => {
+  const nDefs = Object.keys(schema.definitions).length;
+  t.equal(nDefs,
+    34,
+    'Correct amount of definitions');
+  t.equal(Object.keys(validateSchema).length,
+    nDefs, 'Same amount of validators');
+  t.end();
+});
+
 
 tap.test('jsonldContext', t => {
-    const jc = schema.jsonldContext;
-    t.same(Object.keys(jc), ['@context']);
-    t.same(jc['@context'][0], 'http://www.w3.org/ns/anno.jsonld');
-    t.end()
-})
+  const jc = schema.jsonldContext;
+  t.same(Object.keys(jc), ['@context']);
+  t.same(jc['@context'][0], 'http://www.w3.org/ns/anno.jsonld');
+  t.end();
+});
 
-function testFixture(t, type, okOrNotOk, name) {
-    const obj = fixtures[type][okOrNotOk][name]
-    const validFn = schema.validate[type]
-    const valid = validFn(obj)
-    t[okOrNotOk](valid, `${okOrNotOk ? 'Valid' : 'Invalid'} ${type}: ${name}`)
-    if (process.env.FIXTURE && okOrNotOk === 'ok' && !valid) {
-        console.log(JSON.stringify(validFn.errors, null, 2).replace(/^/mg, '\t# '))
-    }
+
+function validateAnnotations(t, inputsMap, minItems) {
+  const cnt = (+inputsMap.size || 0);
+  t.plan(cnt + 1);
+  inputsMap.forEach(function checkOne(inputData, name) {
+    const valid = validateAnno(inputData);
+    t.equal(valid, true, 'Valid Annotation: ' + name);
+  });
+  t.ok(cnt >= minItems, 'Plausibly many examples loaded.');
+  t.end();
 }
 
-if (process.env.FIXTURE) {
-    const fixture = fixtures
-    tap.test(process.env.FIXTURE, t => {
-        testFixture(t, ...process.env.FIXTURE.split('/'))
-        t.end()
-    })
-} else Object.keys(fixtures).forEach(type => {
-    const cases = fixtures[type]
-    const okKeys = Object.keys(cases.ok)
-    const notOkKeys = Object.keys(cases.notOk)
-    tap.test(type, t => {
-        const valid = schema.validate[type]
-        t.plan(okKeys.length + notOkKeys.length)
-        okKeys.forEach(k => testFixture(t, type, 'ok', k))
-        notOkKeys.forEach(k => testFixture(t, type, 'notOk', k))
-    })
-})
+
+tap.test('W3C WPT example annotations', t => {
+  validateAnnotations(t, w3cWptFixtures.allAsMap(), 30);
+});
+
+
+tap.test('Local example annotations', t => {
+  validateAnnotations(t, localExampleAnnos, 4);
+});
+
 
 tap.test('openapi respects config', t => {
     process.env.ANNO_OPENAPI_HOST = 'example.org'
@@ -50,3 +59,27 @@ tap.test('openapi respects config', t => {
     t.equal(schema.openapi.basePath, process.env.ANNO_OPENAPI_BASEPATH, 'OPENAPI_BASEPATH')
     t.end()
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* scroll */

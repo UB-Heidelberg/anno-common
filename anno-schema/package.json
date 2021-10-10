@@ -18,6 +18,6 @@
     "mustache": "^2.3.0"
   },
   "devDependencies": {
-    "@kba/anno-fixtures": "file:../anno-fixtures/"
+    "w3c-wpt-annotation-protocol-fixtures-pmb": "^1.0.0"
   }
 }

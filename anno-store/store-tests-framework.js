@@ -16,10 +16,19 @@
     semi,
   */
 
-const toCamelCase = require('lodash.camelcase');
 const pProps = require('p-props');
+// const nodeFs = require('fs');
 
-const fixtures = require(__dirname + '/../anno-fixtures')
+const annoTestFixtValid = require('../anno-test/fixtures/anno.valid.js');
+
+/*  function cbThrow(err) { if (err) { throw err; } }
+
+    function dumpJsonToFile(topic, data) {
+      const json = JSON.stringify(data, null, 2);
+      nodeFs.writeFile('log.' + topic + '.json', json, cbThrow);
+    }
+*/
+
 const toImport = {
   type: ['Annotation'],
   body: 'http://body',
@@ -33,21 +42,14 @@ const toImport = {
   ]
 }
 
+
+
 const inputs = {
-  minimalOaTag: {target: 'x://y', body: {type: ['oa:Tag']}},
+  ...Object.fromEntries(annoTestFixtValid),
 };
 
-const targetTypes = [
-  'string',
-  'object',
-  'array',
-];
-targetTypes.forEach(function addTargetTypeInput(tt) {
-  const bfn = `minimal-${tt}-target`;
-  inputs[toCamelCase(bfn)] = fixtures.Annotation.ok[bfn + '.json'];
-});
 
-const newTarget = 'https://foo.example.bar'
+const newTarget = 'https://foo.example.bar';
 
 module.exports = class StoreTests {
 
@@ -117,8 +119,8 @@ module.exports = class StoreTests {
         inputs.minimalArrayTarget.target[0].source,
         'target kept (array of objects)')
 
-      const saved4 = await store.create(inputs.minimalOaTag);
-      t.equal(saved4.target, inputs.minimalOaTag.target,
+      const saved4 = await store.create(inputs.minimalOaTagBody);
+      t.equal(saved4.target, inputs.minimalOaTagBody.target,
         'target kept (string)')
 
       t.end();
@@ -127,22 +129,27 @@ module.exports = class StoreTests {
 
   async testSearch(t) {
     return t.test('search', async t => {
-      t.plan(2)
+      t.plan(3);
 
       const {store} = this
-      let annos
 
       await store.wipe()
       await store.init()
       await pProps(inputs, (i => store.create(i)))
 
-      annos = await store.search()
-      // console.log(annos.map(a => a.target))
-      t.equal(annos.length, 4, '4 anno in store total')
+      const foundAll = await store.search()
+      // dumpJsonToFile('search.all', foundAll);
+      const nExpectedTotal = 4;
+      t.equal(foundAll.length, nExpectedTotal,
+        nExpectedTotal + ' annotations total in store');
 
-      annos = await store.search({$target: inputs.minimalStringTarget.target})
-      t.equal(annos.length, 3,
-        `search {$target:${inputs.minimalStringTarget.target}} -> 3`)
+      const someTargetIRI = inputs.minimalStringTarget.target;
+      t.equal(typeof someTargetIRI, 'string');
+      const foundForIRI = await store.search({ $target: someTargetIRI });
+      // dumpJsonToFile('search.found', foundForIRI);
+      const nExpectedResults = 3;
+      t.equal(foundForIRI.length, nExpectedResults,
+        `search ${someTargetIRI} -> ${nExpectedResults}`)
 
       // TODO how to serialize this in a GET call?
       // cb => store.search({'target.source': {$in: [oldTarget, newTarget]}}, cb),
@@ -199,7 +206,7 @@ module.exports = class StoreTests {
       const saved2 = await store.create(inputs.minimalObjectTarget);
       // :TODO: Are the next both even required?
       await store.create(inputs.minimalArrayTarget);
-      await store.create(inputs.minimalOaTag);
+      await store.create(inputs.minimalOaTagBody);
 
       let annos = await store.search()
       t.equal(annos.length, 4, '4 annos before delete')
