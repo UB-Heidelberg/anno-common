@@ -10,56 +10,6 @@ Other projects of interest are:
 
 ## Bootstrap
 
-You need the lerna tool to bootstrap all the modules:
+1.  Clone this repo locally.
+1.  In the repo's top level directory, run `./install.sh`.
 
-```sh
-# Install lerna
-npm install
-
-# Bootstrap dependencies of all modules
-lerna bootstrap --hoist
-```
-
-!!! warning
-    This might take a while
-
-## Makefile
-
-Testing and building is orchestrated with a self-documenting Makefile. Running `make` in the root of the repository will give you an overview:
-
-<!-- BEGIN-EVAL make help -->
-
-  Targets
-
-    bootstrap                 lerna bootstrap and check for binaries
-    prepublish                Compile YAML and such
-    anno-fixtures/index.json  Setup test fixtures
-    start\:%                  cd anno-% && make start
-    stop\:%                   cd anno-% && make stop
-    start-all                 start mongodb, sql and server
-    stop-all                  stop mongodb, sql and server
-    test-all                  Run all unit/integration tests.
-    test                      Run all tests set as TESTS.
-    test\:%                   Run all unit/integration tests in <MODULE>, e.g. make test:store-sql
-    clean                     Remove tempdir
-    webpack                   webpack min, fixtures, schema, memory-store, schema
-    webpack-dev               webpack -s
-    webpack-watch             webpack -d -w
-    webpack-min               webpack production version
-    webpack-clean             Remove all webpacked files
-    site                      Build the documentation in './site'
-    site-serve                Continuously serve the site on localhost:8000
-    site-dist                 Rebuild the dist folder to be deployed
-    shinclude                 Run shinclude on markdown sources
-    site-deploy               Deploy site to Github pages
-
-  Variables
-
-    TEMPDIR   Directory for temporary data. Default: '/home/kba/build/github.com/kba/anno-docker/anno-common/temp'
-    REPORTER  TAP reporter to use. Default tap. One of
-                classic doc dot dump json jsonstream
-                landing list markdown min nyan progress
-                silent spec tap xunit
-    TESTS     All Tests. Default: './anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/anno2heiper.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js'
-
-<!-- END-EVAL -->
