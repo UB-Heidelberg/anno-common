@@ -80,7 +80,7 @@ module.exports = class StoreTests {
       const saved1 = await store.create(inputs.minimalStringTarget)
       const revId = `${saved1.id}~1`
       const byRevId = await store.get(revId)
-      t.equals(byRevId.id, revId, `get by revision-id: ${revId}`)
+      t.equal(byRevId.id, revId, `get by revision-id: ${revId}`)
 
       t.end()
     })
@@ -95,30 +95,30 @@ module.exports = class StoreTests {
       const saved1 = await store.create(inputs.minimalStringTarget)
       t.ok(true, 'create worked')
       // t.comment(JSON.stringify(saved, null, 2))
-      t.equals(saved1.target,
+      t.equal(saved1.target,
         inputs.minimalStringTarget.target,
         'target kept (string)')
 
       const {id} = saved1
       const byId = await store.get(id)
-      t.equals(byId.id, id, `get by url: ${id}`)
+      t.equal(byId.id, id, `get by url: ${id}`)
       inputs.minimalStringTarget.id = byId.id
 
       try {await store.get('DOES-NOT-EXIST')}
-      catch (err) {t.equals(err.code, 404, "DOES-NOT-EXIST isnt found")}
+      catch (err) {t.equal(err.code, 404, "DOES-NOT-EXIST isnt found")}
 
       const saved2 = await store.create(inputs.minimalObjectTarget);
-      t.equals(saved2.target.source,
+      t.equal(saved2.target.source,
         inputs.minimalObjectTarget.target.source,
         'target kept (object)')
 
       const saved3 = await store.create(inputs.minimalArrayTarget);
-      t.equals(saved3.target[0].source,
+      t.equal(saved3.target[0].source,
         inputs.minimalArrayTarget.target[0].source,
         'target kept (array of objects)')
 
       const saved4 = await store.create(inputs.minimalOaTag);
-      t.equals(saved4.target, inputs.minimalOaTag.target,
+      t.equal(saved4.target, inputs.minimalOaTag.target,
         'target kept (string)')
 
       t.end();
@@ -138,16 +138,16 @@ module.exports = class StoreTests {
 
       annos = await store.search()
       // console.log(annos.map(a => a.target))
-      t.equals(annos.length, 4, '4 anno in store total')
+      t.equal(annos.length, 4, '4 anno in store total')
 
       annos = await store.search({$target: inputs.minimalStringTarget.target})
-      t.equals(annos.length, 3,
+      t.equal(annos.length, 3,
         `search {$target:${inputs.minimalStringTarget.target}} -> 3`)
 
       // TODO how to serialize this in a GET call?
       // cb => store.search({'target.source': {$in: [oldTarget, newTarget]}}, cb),
       // (annos, cb) => {
-      //     t.equals(annos.length, 3, `search {target.source: {$in: ${JSON.stringify([oldTarget, newTarget])}}} -> 3`)
+      //     t.equal(annos.length, 3, `search {target.source: {$in: ${JSON.stringify([oldTarget, newTarget])}}} -> 3`)
       //     cb()
       // },
 
@@ -163,8 +163,8 @@ module.exports = class StoreTests {
       let saved1 = await store.create(inputs.minimalStringTarget)
       let reply = await store.reply(saved1.id, {body: {value: 'Nonsense!'}})
       let saved2 = await store.get(saved1.id)
-      t.equals(reply.id, saved1.id + '.1', 'URL has .1 added')
-      t.equals(saved2.hasReply.length, 1, 'now has 1 reply')
+      t.equal(reply.id, saved1.id + '.1', 'URL has .1 added')
+      t.equal(saved2.hasReply.length, 1, 'now has 1 reply')
 
       t.end()
     })
@@ -180,9 +180,9 @@ module.exports = class StoreTests {
       const revised1 = await store.revise(saved1.id, Object.assign(saved1, {target}))
       const revId = `${saved1.id}~2`
       let saved2  = await store.get(saved1.id)
-      t.equals(revised1.id, revId, `revised revision-id: ${revId}`)
-      t.equals(revised1.target, newTarget, 'target updated')
-      t.equals(saved2.hasVersion.length, 2, 'now 2 versions')
+      t.equal(revised1.id, revId, `revised revision-id: ${revId}`)
+      t.equal(revised1.target, newTarget, 'target updated')
+      t.equal(saved2.hasVersion.length, 2, 'now 2 versions')
 
       t.end()
     })
@@ -202,30 +202,30 @@ module.exports = class StoreTests {
       await store.create(inputs.minimalOaTag);
 
       let annos = await store.search()
-      t.equals(annos.length, 4, '4 annos before delete')
+      t.equal(annos.length, 4, '4 annos before delete')
 
       const found = await store.get(saved1.id)
-      t.equals(found.id, saved1.id, 'still there')
+      t.equal(found.id, saved1.id, 'still there')
 
       await store.delete(found.id)
 
       try {
         await store.get(saved1.id)
         t.fail("This one should be gone")
-      } catch (err) {t.equals(err.code, 410, "get on deleted should result in 410 GONE")}
+      } catch (err) {t.equal(err.code, 410, "get on deleted should result in 410 GONE")}
 
       const found410 = await store.get(saved1.id, {includeDeleted: true})
       t.ok(found410, "includeDeleted => found")
 
       await store.delete(saved2.id, {forceDelete: true})
       try {await store.get(saved2.id)}
-      catch (err) {t.equals(err.code, 404, "Aaaand it's gone (404)")}
+      catch (err) {t.equal(err.code, 404, "Aaaand it's gone (404)")}
 
       annos = await store.search()
-      t.equals(annos.length, 2, '2 anno after delete')
+      t.equal(annos.length, 2, '2 anno after delete')
 
       annos = await store.search({}, {includeDeleted: true})
-      t.equals(annos.length, 3, '3 anno after delete including the one set to deleted')
+      t.equal(annos.length, 3, '3 anno after delete including the one set to deleted')
 
       t.end()
     })
@@ -243,16 +243,16 @@ module.exports = class StoreTests {
       }
 
       let got = await store.import(JSON.parse(JSON.stringify(toImport)), options)
-      t.equals(got.id, 'http://localhost:3000/anno/foobar3000', 'id okay')
-      t.equals(got.hasVersion.length, 2, '2 versions')
-      t.equals(got.hasReply.length, 1, '1 reply')
-      t.equals(got.hasReply[0].hasVersion.length, 1, 'first reply has one version')
+      t.equal(got.id, 'http://localhost:3000/anno/foobar3000', 'id okay')
+      t.equal(got.hasVersion.length, 2, '2 versions')
+      t.equal(got.hasReply.length, 1, '1 reply')
+      t.equal(got.hasReply[0].hasVersion.length, 1, 'first reply has one version')
 
       got = await store.import(toImport, options)
-      t.equals(got.id, 'http://localhost:3000/anno/foobar3000', 'id STILL okay')
-      t.equals(got.hasVersion.length, 2, 'STILL 2 versions')
-      t.equals(got.hasReply.length, 1, 'STILL 1 reply')
-      t.equals(got.hasReply[0].hasVersion.length, 1, 'first reply has STILL one version')
+      t.equal(got.id, 'http://localhost:3000/anno/foobar3000', 'id STILL okay')
+      t.equal(got.hasVersion.length, 2, 'STILL 2 versions')
+      t.equal(got.hasReply.length, 1, 'STILL 1 reply')
+      t.equal(got.hasReply[0].hasVersion.length, 1, 'first reply has STILL one version')
 
       t.end()
     })
