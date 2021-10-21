@@ -14,7 +14,6 @@
   "license": "MIT",
   "dependencies": {
     "@kba/anno-errors": "file:../anno-errors/",
-    "@kba/anno-fixtures": "file:../anno-fixtures/",
     "@kba/anno-plugins": "file:../anno-plugins/",
     "@kba/anno-queries": "file:../anno-queries/",
     "@kba/anno-schema": "file:../anno-schema/",

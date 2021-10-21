@@ -11,9 +11,6 @@
   },
   "author": "kba",
   "license": "MIT",
-  "devDependencies": {
-    "@kba/anno-fixtures": "file:../anno-fixtures/"
-  },
   "dependencies": {
     "@kba/anno-errors": "file:../anno-errors/",
     "async": "^2.3.0",

@@ -11,10 +11,9 @@
   "license": "MIT",
   "dependencies": {
     "@kba/anno-util": "file:../anno-util/",
-    "object-prune": "^0.0.4"
-  },
-  "devDependencies": {
-    "@kba/anno-fixtures": "file:../anno-fixtures/"
+    "object-prune": "^0.0.4",
+    "tap": "^15.0.10",
+    "w3c-wpt-annotation-protocol-fixtures-pmb": "^1.0.2"
   },
   "scripts": {
     "test": "echo 'W: No real tests yet.' >&2"

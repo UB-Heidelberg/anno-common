@@ -13,9 +13,6 @@
   "homepage": "https://github.com/kba/anno/tree/master/anno-plugins#readme",
   "author": "kba",
   "license": "MIT",
-  "devDependencies": {
-    "@kba/anno-fixtures": "file:../anno-fixtures/"
-  },
   "dependencies": {
     "@kba/anno-errors": "file:../anno-errors/",
     "@kba/anno-util": "file:../anno-util/",

@@ -1,7 +1,7 @@
 MAKEFLAGS += --no-print-directory --silent
 PATH := "$(PWD)/node_modules/.bin:$(PATH)"
-MKDIR = mkdir -p
-RM = rm -rf
+MKDIR = mkdir --parents --
+RM = rm --one-file-system --recursive --force --
 
 export SHLOG_TERM=info
 
@@ -24,9 +24,7 @@ help:
 	@echo ""
 	@echo "  Targets"
 	@echo ""
-	@echo "    bootstrap                 lerna bootstrap and check for binaries"
 	@echo "    prepublish                Compile YAML and such"
-	@echo "    anno-fixtures/index.json  Setup test fixtures"
 	@echo "    start\:%                  cd anno-% && make start"
 	@echo "    stop\:%                   cd anno-% && make stop"
 	@echo "    start-all                 start mongodb, sql and server"
@@ -35,7 +33,7 @@ help:
 	@echo "    test                      Run all tests set as TESTS."
 	@echo "    test\:%                   Run all unit/integration tests in <MODULE>, e.g. make test:store-sql"
 	@echo "    clean                     Remove tempdir"
-	@echo "    webpack                   webpack min, fixtures, schema, memory-store, schema"
+	@echo "    webpack                   webpack min, schema, memory-store, schema"
 	@echo "    webpack-dev               webpack -s"
 	@echo "    webpack-watch             webpack -d -w"
 	@echo "    webpack-min               webpack production version"
@@ -57,24 +55,10 @@ help:
 
 # END-EVAL
 
-# lerna bootstrap and check for binaries
-.PHONY: bootstrap
-bootstrap:
-	@if ! which rapper >/dev/null;then echo "rapper not installed. try 'apt install raptor2-utils'" ; exit 1 ;fi
-	@if [ ! -d node_modules ];then npm install;fi
-	lerna bootstrap
-
 # Compile YAML and such
 prepublish:
 	cd anno-schema; npm run prepublish
 	cd anno-plugins; npm run prepublish
-
-# Setup test fixtures
-.PHONY: bootstrap-test
-bootstrap-test: bootstrap anno-fixtures/index.json
-
-anno-fixtures/index.json:
-	cd $(dir $@) && make $(notdir $@)
 
 #
 # Starting / Stopping

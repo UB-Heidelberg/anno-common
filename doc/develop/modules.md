@@ -8,7 +8,6 @@ Click on the image for links
 - [anno-auth-server](./anno-auth-server): Authentication and token generation server
 - [anno-cli](./anno-cli): Command line interface for anno-*
 - [anno-errors](./anno-errors): Shared errors for anno-*
-- [anno-fixtures](./anno-fixtures): Sample data for testing and experimentation
 - [anno-plugins](./anno-plugins): Rights management for anno store (users and rules)
 - [anno-queries](./anno-queries): Search and create fragments of Web Annotations
 - [anno-schema](./anno-schema): JSON schema, OpenAPI and JSON-LD context
