@@ -16,6 +16,7 @@
     "w3c-wpt-annotation-protocol-fixtures-pmb": "^1.0.2"
   },
   "scripts": {
-    "test": "echo 'W: No real tests yet.' >&2"
+    "tap": "tap *.test.js",
+    "test": "echo 'W: skip: bug ubhd#50' >&2"
   }
 }
