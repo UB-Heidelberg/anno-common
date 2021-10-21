@@ -14,15 +14,13 @@ dist: focal
 addons:
   apt:
     packages:
-    - raptor2-utils
+        - raptor2-utils
 
 install:
   - ./install.sh
 
 script:
   - npm test
-  - make bootstrap-test
-  - make test-all
 
 
 
