@@ -20,5 +20,8 @@
     "axios": "^0.15.3",
     "envyconf": "^0.0.7",
     "querystring": "^0.2.0"
+  },
+  "devDependencies": {
+    "tap": "^15.0.10"
   }
 }

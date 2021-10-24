@@ -13,7 +13,10 @@
   "author": "kba",
   "license": "MIT",
   "dependencies": {
-    "jsonbased-yamlify-pmb": "^0.1.4",
-    "esmod-pmb": "^0.1.11"
+    "esmod-pmb": "^0.1.11",
+    "jsonbased-yamlify-pmb": "^0.1.4"
+  },
+  "devDependencies": {
+    "tap": "^15.0.10"
   }
 }

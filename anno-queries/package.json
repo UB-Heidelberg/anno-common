@@ -15,6 +15,9 @@
     "tap": "^15.0.10",
     "w3c-wpt-annotation-protocol-fixtures-pmb": "^1.0.2"
   },
+  "devDependencies": {
+    "tap": "^15.0.10"
+  },
   "scripts": {
     "tap": "tap *.test.js",
     "test": "echo 'W: skip: bug ubhd#50' >&2"

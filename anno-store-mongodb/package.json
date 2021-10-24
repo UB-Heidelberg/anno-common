@@ -18,6 +18,7 @@
     "mongodb": "^2.2.25"
   },
   "devDependencies": {
-    "@kba/anno-store": "file:../anno-store/"
+    "@kba/anno-store": "file:../anno-store/",
+    "tap": "^15.0.10"
   }
 }

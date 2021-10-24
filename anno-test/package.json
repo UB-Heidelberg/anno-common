@@ -22,7 +22,9 @@
     "@kba/anno-util": "file:../anno-util/",
     "@kba/anno-util-loaders": "file:../anno-util-loaders/",
     "envyconf": "^0.0.7",
-    "merge-options": "^3.0.4",
-    "tap": "^11.0.1"
+    "merge-options": "^3.0.4"
+  },
+  "devDependencies": {
+    "tap": "^15.0.10"
   }
 }

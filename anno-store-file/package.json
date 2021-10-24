@@ -16,5 +16,9 @@
     "callbackify": "^1.1.0",
     "envyconf": "^0.0.7",
     "nedb": "^1.8.0"
+  },
+  "devDependencies": {
+    "pify": "^3.0.0",
+    "tap": "^15.0.10"
   }
 }

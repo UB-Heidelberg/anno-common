@@ -19,5 +19,8 @@
     "@kba/anno-util": "file:../anno-util/",
     "async": "^2.3.0",
     "envyconf": "^0.0.7"
+  },
+  "devDependencies": {
+    "tap": "^15.0.10"
   }
 }

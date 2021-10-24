@@ -18,6 +18,7 @@
     "mustache": "^2.3.0"
   },
   "devDependencies": {
+    "tap": "^15.0.10",
     "w3c-wpt-annotation-protocol-fixtures-pmb": "^1.0.0"
   }
 }
