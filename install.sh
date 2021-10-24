@@ -26,8 +26,18 @@ function vdo () { echo -n "D: $*: "; "$@"; }
 
 
 function check_missing_os_packages () {
-  vdo rapper --version || return 3$(
-    echo "E: Please apt-get install raptor2-utils" >&2)
+  vdo rapper --version && return 0
+
+  local PKG='raptor2-utils'
+  if [ "$(whoami)" == root ]; then
+    echo "D: Rapper not found. Trying to install it:"
+    apt update
+    apt install --yes "$PKG"
+    vdo rapper --version && return 0
+  fi
+
+  echo "E: Please apt-get install $PKG" >&2
+  return 3
 }
 
 

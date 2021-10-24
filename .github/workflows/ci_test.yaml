@@ -21,17 +21,13 @@ jobs:
               with:
                 node-version: 16
 
-            - run: 'npm install --global npm@7'
-
             - uses: actions/checkout@v2
-
-            - run: './install.sh'
 
             - name: 'Start MongoDB'
               uses: supercharge/mongodb-github-action@1.6.0
               with:
                 mongodb-version: 3.6
 
-            - run: 'npm test'
+            - run: './anno-test/ci.sh'
 
 ...

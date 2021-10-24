@@ -16,11 +16,8 @@ addons:
     packages:
         - raptor2-utils
 
-install:
-  - ./install.sh
-
 script:
-  - npm test
+  - './anno-test/ci.sh'
 
 
 

@@ -10,17 +10,10 @@ services:
 stages:
   - test
 
-before_script:
-  - apt update
-  - apt install --yes raptor2-utils
-  - npm install --global npm@7
-  - npm version
-  - ./install.sh
-
 test:
   stage: test
   script:
-    - npm test
+    - './anno-test/ci.sh'
 
 
 
