@@ -1,6 +1,6 @@
 const {RuleSet} = require('sift-rule')
 const {envyConf, envyLog} = require('envyconf')
-const errors = require('@kba/anno-errors')
+const errors = require('../anno-errors')
 
 const FALLBACK_RULE = {
     name: 'Fallback Rule',

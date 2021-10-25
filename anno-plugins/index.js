@@ -1,4 +1,4 @@
-const {StaticLoader, ConfigReloader} = require('@kba/anno-util-loaders')
+const {StaticLoader, ConfigReloader} = require('../anno-util-loaders')
 
 const AclProcessor        = require('./acl')
 const UserProcessor       = require('./user')

@@ -1,6 +1,6 @@
 const deepExtend = require('deep-extend')
 const lodashSet = require('lodash.set')
-const {applyToAnno} = require('@kba/anno-util')
+const {applyToAnno} = require('../anno-util')
 const UserBase = require('./user-base')
 
 const METHODS = new Set([

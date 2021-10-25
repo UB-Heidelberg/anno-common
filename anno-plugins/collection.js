@@ -1,5 +1,5 @@
 const {envyLog} = require('envyconf')
-const errors = require('@kba/anno-errors')
+const errors = require('../anno-errors')
 
 class AnnoCollection {
 
