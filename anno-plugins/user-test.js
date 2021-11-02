@@ -1,8 +1,8 @@
 process.ANNO_DEBUG = false
 
 module.exports = {
-    testUser(tap, proc) {
-        tap.test('admin-user', t => {
+    testUser(declareTest, proc) {
+        declareTest('admin-user', t => {
             const ctx = {user: "admin-user"}
             proc(ctx, err => {
                 t.equals(err, undefined, "No error")
@@ -12,7 +12,7 @@ module.exports = {
             })
         })
 
-        tap.test('admin-user@l33tsp34k', t => {
+        declareTest('admin-user@l33tsp34k', t => {
             const ctx = {user: {id: "admin-user"}, collection: 'l33tsp34k'}
             proc(ctx, err => {
                 t.equals(ctx.user.public.displayName, '4dm33n', 'collection-specific username')
@@ -20,7 +20,7 @@ module.exports = {
             })
         })
 
-        tap.test('admin-user@l33tsp34k / icon (rules are additive)', t => {
+        declareTest('admin-user@l33tsp34k / icon (rules are additive)', t => {
             const ctx = {user: {id: "admin-user"}, collection: 'l33tsp34k'}
             proc(ctx, err => {
                 t.equals(ctx.user.public.displayName, '4dm33n', 'collection-specific username')
@@ -29,7 +29,7 @@ module.exports = {
             })
         })
 
-        tap.test('mike@test-collection', t => {
+        declareTest('mike@test-collection', t => {
             const ctx = {user: "mike", collection: 'test-collection'}
             proc(ctx, err => {
                 t.equals(ctx.user.role, 'moderator', 'mike is moderator in test-collectino')
@@ -37,7 +37,7 @@ module.exports = {
             })
         })
 
-        tap.test('spambot3000', t => {
+        declareTest('spambot3000', t => {
             const ctx = {user: "spambot3000"}
             proc(ctx, err => {
                 t.equals(ctx.user.inactive, true, 'is inactive')

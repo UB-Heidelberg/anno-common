@@ -1,4 +1,4 @@
-const tap = require('tap')
+const tape = require('tape');
 const {PreAclStatic, PreUserStatic} = require('.')
 process.ANNO_DEBUG = false
 const {testAllow, testForbid} = require('./acl-test')
@@ -29,8 +29,8 @@ const {testUser} = require('./user-test')
 //     testAllow (t,pipeline,{method:'create',user:{id:'john'}})
 //     t.end()
 // })
-tap.test('user', t => {
-    testUser(t, PreUserStatic())
+tape.test('user', t => {
+    testUser(t.test.bind(t), PreUserStatic())
     t.end()
 })
 

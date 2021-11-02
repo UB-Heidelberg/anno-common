@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "node ../scripts/yml2json.js *.yml",
-    "tap": "tap *.test.js",
-    "test": "echo 'W: skip: bug ubhd#34' >&2"
+    "test": "tape *.test.js"
   },
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
@@ -20,6 +19,6 @@
     "sift-rule": "^0.1.3"
   },
   "devDependencies": {
-    "tap": "^15.0.10"
+    "tape": "^5.3.1"
   }
 }
