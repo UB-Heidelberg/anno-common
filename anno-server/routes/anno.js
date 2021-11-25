@@ -317,7 +317,9 @@ module.exports = ({store}) => {
     //----------------------------------------------------------------
     // Content-Negotiation
     //----------------------------------------------------------------
-    router.use(require('../middleware/content-negotiation')())
+    if (+process.env.ANNO_NEGOTIATE_TURTLE) {
+      router.use(require('../middleware/content-negotiation')())
+    }
 
 
     //----------------------------------------------------------------
