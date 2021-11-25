@@ -7,13 +7,33 @@ function dev_server () {
   local SELFPATH="$(readlink -m -- "$BASH_SOURCE"/..)"
   cd -- "$SELFPATH" || return $?
 
+  local RC=
+  for RC in cfg.{"$HOSTNAME",local}.rc; do
+    [ ! -f "$RC" ] || source -- "$RC" || return $?$(
+      echo "E: Failed to source '$RC', rv=$?" >&2)
+  done
+
   local ANNO_COMMON_DIR="${SELFPATH%/*}"
   # seems to work without -> # lerna bootstrap --hoist || return $?
-  export ANNO_COLLECTION_FILE="$ANNO_COMMON_DIR$(
+  acfg COLLECTION_FILE="$ANNO_COMMON_DIR$(
     )/anno-server/example_collections_file.json"
-  export ANNO_USER_FILE="$ANNO_COMMON_DIR/anno-plugins/users-example.json"
-  export ANNO_TEXT_REQUEST="$(cat -- docs/examples/templates/request_form.html)"
-  exec node auth-server.js
+  acfg USER_FILE="$ANNO_COMMON_DIR/anno-plugins/users-example.json"
+
+  acfg TEXT_REQUEST="$(cat -- docs/examples/templates/request_form.html)"
+  acfg SMTP_HOST="$(hostname --fqdn)"
+  acfg SMTP_FROM="$USER@$(hostname --fqdn)"
+  acfg SMTP_TO="$ANNO_SMTP_FROM"
+
+  exec node auth-server.js "$@"
+}
+
+
+function acfg () {
+  local D=
+  for D in "$@"; do
+    D="ANNO_$D"
+    eval '[ -n "$'"${D%%=*}"'" ] || export "$D"'
+  done
 }
 
 

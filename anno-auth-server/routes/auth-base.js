@@ -6,12 +6,31 @@ const express             = require('express')
 const connectFlash        = require('connect-flash')
 const {PreCollectionFile} = require('@kba/anno-plugins')
 
+
+function shortDate() { return String(new Date()).split(' (')[0]; }
+
+
+function refineSmtpSecure(origSecure, port) {
+  const s = String(origSecure);
+  if (s === '0') { return false; }
+  if (s === 'false') { return false; }
+  if (s === '1') { return true; }
+  if (s === 'true') { return true; }
+
+  if (port === 25) { return false; } // SMTP
+  if (port === 465) { return true; }  // Submission over TLS [RFC8314]
+  if (port === 587) { return false; } // Submission [RFC4409]
+  return false;
+}
+
+
 function textRequestMail({sessUserName, displayName, collections, email, reasons}) {
-  email = email ? email : 'not provided'
   return `
 Dear Admin,
 
-a user '${displayName}' (Email: ${email}, ID: ${sessUserName}) has requested access to these collections: ${collections.map(c => `\n  * ${c}`)}
+a user '${displayName}' (Email: ${email || 'not provided'
+  }, ID: ${sessUserName}) has requested access to these collections:${
+  collections.map(c => `\n  * ${c}`).join('') || '(none)'}
 
 Reasons given:
 
@@ -81,16 +100,19 @@ module.exports =
         TEXT_REQUEST,
       } = envyConf('ANNO', {
         TOKEN_EXPIRATION: 12 * 60 * 60,
-        SMTP_SECURE: true,
+        SMTP_HOST: 'localhost',
+        SMTP_PORT: 25,
         TEXT_REGISTER: `<pre>Set the TEXT_REGISTER conf variable to add text here</pre>`,
         TEXT_REQUEST: `<pre>Set the TEXT_REQUEST conf variable to add text here</pre>`,
       })
 
-      const smtp = nodemailer.createTransport({
+      const mailTransportCfg = {
         host: SMTP_HOST,
         port: SMTP_PORT,
-        secure: SMTP_SECURE, // secure:true for port 465, secure:false for port 587
-      })
+        secure: refineSmtpSecure(SMTP_SECURE, SMTP_PORT),
+      };
+      console.debug('mailTransportCfg:', mailTransportCfg);
+      const smtp = nodemailer.createTransport(mailTransportCfg);
 
       //
       // GET /auth/login
@@ -183,17 +205,18 @@ module.exports =
           from: SMTP_FROM,
           to: SMTP_TO,
           subject: `Anno-Registrierung ${sessUserName}`,
-          text
+          text,
         }
+        console.info(shortDate(), 'Trying to send mail for', { sessUserName });
         smtp.sendMail(mail, err => {
           if (err) {
-            console.log(err)
-            console.log("Failed to send this data by mail")
-            console.log({mail})
+            console.error(shortDate(), 'Failed to send this email:', err)
+            console.error('Reason:', err)
+          } else {
+            console.info(shortDate(), 'Mail was sent for', { sessUserName });
           }
           resp.redirect(`request?ok=1`)
         })
-        console.log({mail})
       })
 
       return this.router
