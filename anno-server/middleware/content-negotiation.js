@@ -12,9 +12,9 @@ function factory() {
                 if (err) return next(err)
                 return resp.send(turtle)
             })
-        } else {
-            return resp.send(resp.jsonld)
+            return
         }
+        return next()
     }
 }
 
