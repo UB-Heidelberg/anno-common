@@ -1,3 +1,5 @@
+const isFunc = require('is-fn');
+
 const ConfigReloader = require('./config-reloader')
 const StaticLoader = require('./static-loader')
 
@@ -14,16 +16,25 @@ function loadPlugins(modNames, options, cb) {
         .filter(s => s !== '')
     async.eachSeries(modNames, (modNameRaw, next) => {
         const [modName, modImport] = modNameRaw.split(':')
-        var mod;
+        const descr = `Loading module ${modName}${
+          modImport ? ('/' + modImport) : ''
+          } for ${options.loadingModule.filename}`;
+        let mod;
         try {
-            log.silly(`Loading module ${modName}${modImport?'/'+modImport:''} for ${options.loadingModule.filename}`)
+            log.silly(descr)
             mod = options.loadingModule.require(modName)
         } catch (err) {
             console.log(err)
             console.error(`Please install '${modName}'`)
             process.exit(1)
         }
-        const plugin = modImport ? mod[modImport]() : mod()
+        const modFunc = (modImport ? mod[modImport] : mod);
+        if (!isFunc(modFunc)) {
+          throw new TypeError(descr
+            + ': Expected import to be a function but got a '
+            + (typeof modFunc) + ' instead.');
+        }
+        const plugin = modFunc();
         options.afterLoad(plugin, next)
     }, cb)
 }

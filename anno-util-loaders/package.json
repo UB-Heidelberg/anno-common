@@ -13,9 +13,9 @@
   "license": "MIT",
   "dependencies": {
     "@kba/anno-errors": "file:../anno-errors/",
-    "async": "^2.3.0",
-    "chokidar": "^1.7.0",
+    "async": "^2.6.3",
     "envyconf": "^0.0.7",
+    "is-fn": "^2.0.0",
     "safeload-yaml-pmb": "^4.210519.0",
     "strip-bom": "^4.0.0"
   }
