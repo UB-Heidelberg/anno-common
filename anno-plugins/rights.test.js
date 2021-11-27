@@ -1,8 +1,8 @@
 const tape = require('tape');
 const {PreAclStatic, PreUserStatic} = require('.')
 process.ANNO_DEBUG = false
-const {testAllow, testForbid} = require('./acl-test')
-const {testUser} = require('./user-test')
+const {testAllow, testForbid} = require('./acl.test')
+const {testUser} = require('./user.test')
 
 // tap.test('acl', t => {
 //     const acl = PreAclStatic()
