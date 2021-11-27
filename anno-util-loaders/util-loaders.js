@@ -10,11 +10,8 @@ function loadPlugins(modNames, options, cb) {
     if (!(options.loadingModule)) throw new Error("Must provide 'loadingModule' option")
     if (!(options.afterLoad)) throw new Error("Must provide 'afterLoad' option")
     const log = envyLog('ANNO', 'loadPlugins')
-    modNames = modNames
-        .split(',')
-        .map(s => s.trim())
-        .filter(s => s !== '')
-    async.eachSeries(modNames, (modNameRaw, next) => {
+    const modsList = modNames.replace(/,/g, ' ').match(/\S+/g) || [];
+    async.eachSeries(modsList, (modNameRaw, next) => {
         const [modName, modImport] = modNameRaw.split(':')
         const descr = `Loading module ${modName}${
           modImport ? ('/' + modImport) : ''
