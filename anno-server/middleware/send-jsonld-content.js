@@ -4,13 +4,10 @@
 function sendJsonldContent(req, resp, next) {
   const { jsonld } = resp;
   if (jsonld !== undefined) { resp.send(jsonld); }
-  return next();
+  return resp.end();
 }
 
 
-function factory() {
-  return sendJsonldContent;
-}
-
+function factory() { return sendJsonldContent; }
 
 module.exports = factory;
