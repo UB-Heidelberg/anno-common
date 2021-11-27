@@ -4,7 +4,7 @@
   "description": "Plugins to augment anno-store*",
   "main": "index.js",
   "scripts": {
-    "prepublish": "node ../scripts/yml2json.js *.yml",
+    "prepublish": "node ../scripts/yml2json.js *.yaml",
     "test": "tape *.test.js"
   },
   "repository": "github:kba/anno",
