@@ -1,6 +1,7 @@
 const {RuleSet} = require('sift-rule')
 const {envyConf, envyLog} = require('envyconf')
 const errors = require('../anno-errors')
+const defaultRules = require('./acl.defaults.json');
 
 const FALLBACK_RULE = {
     name: 'Fallback Rule',
@@ -9,9 +10,11 @@ const FALLBACK_RULE = {
 
 class AnnoAcl {
 
-    constructor(rules=[]) {
-        // TODO validate
-        this.rules = new RuleSet(rules)
+    constructor(rules) {
+      this.rules = new RuleSet([].concat(
+        rules,
+        defaultRules,
+      ).filter(Boolean))
     }
 
     process(ctx, cb) {
@@ -61,5 +64,12 @@ class AnnoAcl {
     }
 
 }
+
+
+Object.assign(AnnoAcl, {
+  defaultRules,
+});
+
+
 
 module.exports = AnnoAcl

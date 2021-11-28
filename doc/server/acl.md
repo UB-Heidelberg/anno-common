@@ -1,14 +1,34 @@
-# Rights Management
 
-## Rules
+Permissions Management
+======================
 
-!!! TODO
+Rules
+-----
 
-## Roles
+The ACL is a list of rules in the format used by
+[sift-rule](https://www.npmjs.com/package/sift-rule).
+The first matching rule "wins", i.e. decides whether an action is allowed.
 
-Roles are used in [Rules](#rules) to define rights for groups of users. They have no meaning without rules that use them!
+Your local ACL file may be empty, but is required, to guard against the
+case of an accidentially missing ACL, i.e. in case of a failing mount point.
 
-The descriptions here are valid for the [default rules](https://github.com/kba/anno-common/blob/master/anno-plugins/default-rules.yml)
+Some [default rules](../../anno-plugins/acl.defaults.yaml)
+are appended to your local ACL rules for your convenience.
+If you prefer to not use them, just add a final deny rule to your local ACL,
+just like the final default rule.
+
+
+
+Roles
+-----
+
+Roles are used in [Rules](#rules) to define rights for groups of users.
+They have no meaning without rules that use them!
+
+
+
+Roles as used in the default ACL
+--------------------------------
 
 ### admin
 
