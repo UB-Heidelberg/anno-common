@@ -7,10 +7,6 @@
 # RESULT is a tru-ish value to allow or false to deny request
 # DESCRIPTION is an optional description of the rule
 
-# - - collection: 'test-collection'
-#   - true
-#   - "Allow everybody to do everything on 'test-collection'"
-
 - - user.inactive: true
   - false
   - "Inactive users are not allowed to do anything"
@@ -87,6 +83,6 @@
   - "Importers may import anything, doiMinters may import their own annotations"
 
 # Default Rule. Must be last
-- - {}
+- - {} # no criteria => always matches
   - false
   - "Fallback to disallow any interaction"
