@@ -6,6 +6,7 @@ function dev_server () {
   export LANG{,UAGE}=en_US.UTF-8  # make error messages search engine-friendly
   local SELFPATH="$(readlink -m -- "$BASH_SOURCE"/..)"
   cd -- "$SELFPATH" || return $?
+  maybe_set_screen_title
 
   local RC=
   for RC in cfg.{"$HOSTNAME",local}.rc; do
@@ -34,6 +35,27 @@ function acfg () {
     D="ANNO_$D"
     eval '[ -n "$'"${D%%=*}"'" ] || export "$D"'
   done
+}
+
+
+function maybe_set_screen_title () {
+  [ "${TERM%%.*}" == 'screen' ] || return 0
+  [ -n "$STY" ] || return 0
+  [ -n "$WINDOW" ] || return 0
+
+  # Running in a screen (terminal multiplexer) window
+  local TITLE='anno-auth-server dev'
+  TITLE+=" running as user $USER"
+
+  local COMMIT="$(git rev-parse HEAD)"
+  if [ -n "$COMMIT" ]; then
+    TITLE+=", git: ${COMMIT:0:7}"
+    git status --porcelain | grep --quiet --regexp=. && TITLE+=' (unclean)'
+  fi
+
+  # TITLE+=", pwd: $PWD"
+
+  screen -X title "$TITLE"
 }
 
 
