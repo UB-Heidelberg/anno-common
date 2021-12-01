@@ -22,7 +22,6 @@ reuse of components.
   * [Comments / Replies / Nesting](#comments--replies--nesting)
   * [URL schema](#url-schema)
   * [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
-* [Hacking](#hacking)
 
 <!-- END-MARKDOWN-TOC -->
 
@@ -103,12 +102,5 @@ Namespace for extensions is `https://kba.github.io/anno/#`, short `annox`.
 
 Context is at `https://anno.github.io/anno/context.jsonld`
 
-## Hacking
 
-Modules are managed by [lerna](https://github.com/lerna/lerna)
-
-```
-npm install -g lerna
-lerna bootstrap
-```
 
