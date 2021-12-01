@@ -16,12 +16,12 @@ reuse of components.
 
 <!-- BEGIN-MARKDOWN-TOC -->
 * [Concepts](#concepts)
-	* [Store](#store)
-	* [Authentication](#authentication)
-	* [Revisions](#revisions)
-	* [Comments / Replies / Nesting](#comments--replies--nesting)
-	* [URL schema](#url-schema)
-	* [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
+  * [Store](#store)
+  * [Authentication](#authentication)
+  * [Revisions](#revisions)
+  * [Comments / Replies / Nesting](#comments--replies--nesting)
+  * [URL schema](#url-schema)
+  * [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
 * [Hacking](#hacking)
 
 <!-- END-MARKDOWN-TOC -->
