@@ -80,6 +80,9 @@ E.g.
 
 Replies reply to the generic not versioned annotation (for sanity)
 
+For DOIs and the specification of the ID there, the separator `~` is converted into an underscore (`_`), since the character `~` is no longer permitted there.
+
+
 ### Extensions to Web Annotation Data Model
 
 Namespace for extensions is `https://kba.github.io/anno/#`, short `annox`.
