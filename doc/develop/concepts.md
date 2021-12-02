@@ -29,7 +29,7 @@ The [`store-mongolike`](./anno-store-mongolike) module implements most of the
 such as [mongodb](https://mongodb.com) or
 [NeDB](https://github.com/louischatriot/nedb).
 
-<img src="./doc/assets/img/store-hierarchy.png" height="300" title="Hierarchy of stores"/>
+<img src="../assets/img/store-hierarchy.png" height="300" title="Hierarchy of stores"/>
 
 
 
@@ -41,7 +41,7 @@ To inspect your tokens, try [jwtinspector browser
 extension](https://www.jwtinspector.io/#) which will detect JWT in HTTP traffic
 and localStorage.
 
-<img src="./doc/assets/img/authentication.png" height="400" title="Authentication flow"/>
+<img src="../assets/img/authentication.png" height="400" title="Authentication flow"/>
 
 ### Revisions
 
