@@ -1,5 +1,6 @@
-{ "name": "anno",
-  "private": true,
+{ "name": "anno-common",
+  "description": "Modules for working with Annotations as per W3C Web Annotation Data Model.",
+
   "scripts": {
     "bootstrap": "./install.sh",
     "each_subpkg": "npm-ci-utils-pmb each_subpkg \"$@\"",
@@ -7,8 +8,16 @@
     "sh": "\"$@\"",
     "test": "npm-ci-utils-pmb each_subpkg npm test && echo '=== All tests passed. ==='"
   },
+
+
+  "dependencies": {
+  },
   "devDependencies": {
     "npm-ci-utils-pmb": "^0.1.4",
     "safeload-yaml-pmb": "^4.210519.0"
-  }
+  },
+
+
+
+  "private": true
 }
