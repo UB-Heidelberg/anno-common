@@ -1,21 +1,21 @@
 {
   "name": "@kba/anno-schema",
-  "version": "0.0.8",
+  "version": "0.2112061800.0",
   "description": "Anno JSON schema",
   "main": "schema.js",
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-schema#readme",
   "scripts": {
-    "prepublish": "node ../scripts/yml2json.js *.yml",
     "test": "tap *.test.js"
   },
   "author": "kba",
   "license": "MIT",
   "dependencies": {
-    "ajv": "^5.2.0",
+    "ajv": "^5.5.2",
     "envyconf": "^0.0.7",
-    "mustache": "^2.3.0"
+    "mustache": "^2.3.2",
+    "safeload-yaml-from-file-sync-pmb": "^0.1.0"
   },
   "devDependencies": {
     "tap": "^15.0.10",

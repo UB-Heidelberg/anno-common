@@ -1,7 +1,8 @@
 const {RuleSet} = require('sift-rule')
 const {envyConf, envyLog} = require('envyconf')
 const errors = require('../anno-errors')
-const defaultRules = require('./acl.defaults.json');
+const readYamlSync = require('safeload-yaml-from-file-sync-pmb').r(require);
+const defaultRules = readYamlSync('./acl.defaults.yaml');
 
 const FALLBACK_RULE = {
     name: 'Fallback Rule',

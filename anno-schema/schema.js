@@ -27,9 +27,10 @@ function mustacheJSON(obj, ctx) {
     return JSON.parse(mustache.render(JSON.stringify(obj), ctx))
 }
 
-const dataModel     = require('./data-model.json')
-const jsonldContext = require('./context.json')
-const openapi       = require('./openapi.json')
+const readYamlSync = require('safeload-yaml-from-file-sync-pmb').r(require);
+const dataModel     = readYamlSync('./data-model.yaml');
+const jsonldContext = readYamlSync('./context.yaml');
+const openapi       = readYamlSync('./openapi.yaml');
 openapi.definitions = dataModel.definitions
 
 module.exports = {

@@ -28,6 +28,4 @@ class UserProcessor extends UserBase {
     }
 }
 
-module.exports = UserProcessor
-module.exports.usersExample = require('./users-example.json')
-
+module.exports = UserProcessor;

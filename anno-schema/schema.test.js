@@ -2,11 +2,10 @@
 'use strict';
 
 const tap = require('tap');
-const schema = require('.');
-const fs = require('fs');
-
 const w3cWptFixtures = require('w3c-wpt-annotation-protocol-fixtures-pmb');
+
 const localExampleAnnos = require('../anno-test/fixtures/anno.valid.js');
+const schema = require('./schema.js');
 
 const validateSchema = schema.validate;
 const validateAnno = validateSchema.Annotation;

@@ -15,9 +15,9 @@ function dev_server () {
 
   local ANNO_COMMON_DIR="${SELFPATH%/*}"
   # seems to work without -> # lerna bootstrap --hoist || return $?
-  acfg COLLECTION_FILE="$ANNO_COMMON_DIR$(
-    )/anno-server/example_collections_file.json"
-  acfg USER_FILE="$ANNO_COMMON_DIR/anno-plugins/users-example.json"
+  local EX="$ANNO_COMMON_DIR/anno-plugins/¤-example.yaml"
+  acfg COLLECTION_FILE="${EX//¤/collections}"
+  acfg USER_FILE="${EX//¤/users}"
 
   acfg TEXT_REQUEST="$(cat -- docs/examples/templates/request_form.html)"
   acfg SMTP_HOST="$(hostname --fqdn)"

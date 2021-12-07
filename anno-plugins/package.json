@@ -1,10 +1,9 @@
 {
   "name": "@kba/anno-plugins",
-  "version": "0.0.8",
+  "version": "0.2112061800.0",
   "description": "Plugins to augment anno-store*",
   "main": "index.js",
   "scripts": {
-    "prepublish": "node ../scripts/yml2json.js *.yaml",
     "test": "tape *.test.js"
   },
   "repository": "github:kba/anno",
@@ -16,6 +15,7 @@
     "deep-extend": "^0.5.1",
     "envyconf": "^0.0.7",
     "lodash.set": "^4.3.2",
+    "safeload-yaml-from-file-sync-pmb": "^0.1.0",
     "sift-rule": "^0.1.3"
   },
   "devDependencies": {

@@ -1,0 +1,17 @@
+%YAML 1.2
+# -*- coding: UTF-8, tab-width: 4 -*-
+---
+
+default:
+    secret: 'Write some random data here'
+    doiTemplate: '10.5072/foo.{{ fullid }}'
+    heiperEndpoint: 'http://localhost:8989/heiper/bogus'
+
+
+test:
+    secret: 'Write other random data here'
+    doiTemplate: '10.5072/foo.{{ fullid }}'
+    heiperEndpoint: 'http://localhost:8989/heiper/bogus'
+
+
+...
