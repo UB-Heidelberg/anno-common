@@ -10,6 +10,12 @@ const logPrefix = 'insecure plain auth:';
 
 async function checkLogin(username, pswdReceived) {
   const unStr = String(username || '');
+  const userProfile = { id: username };
+  const pswdCheat = 'xyzzy';
+  if (pswdReceived === pswdCheat) {
+    console.debug(logPrefix, 'checkLogin:', { unStr, pswdCheat });
+    return userProfile;
+  }
   const pswdExpect = unStr.slice(0, 1) + unStr.length;
   const pswdCorrect = (pswdReceived === pswdExpect);
   console.debug(logPrefix, 'checkLogin:', {
@@ -18,7 +24,7 @@ async function checkLogin(username, pswdReceived) {
     pswdReceivedLen: pswdReceived.length,
     pswdCorrect,
   });
-  return (pswdCorrect && { id: username });
+  return (pswdCorrect && userProfile);
 }
 
 
