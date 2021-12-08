@@ -70,7 +70,7 @@ ID is a [nice slugid](https://www.npmjs.com/package/slugid), based on uuid v4
 without leading dash
 
 ```
-<BASE_URL>/<ID>[.<REPLY_ID>]*[~<REVISION_ID>]
+<BASE_URL>/<BASE_PATH>/<ID>[.<REPLY_ID>]*[~<REVISION_ID>]
 ```
 
 E.g.

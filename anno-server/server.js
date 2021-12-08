@@ -41,7 +41,7 @@ const envConfig = envyConf('ANNO', {
   LOGLEVEL: 'debug',
   PORT: '33321',
   BASE_URL: 'http://localhost:33321/',
-  BASE_PATH: '',
+  BASE_PATH: '/anno',
   STORE: '@kba/anno-store-file',
   DIST_DIR: absPath('public'),
   ENABLE_JWT_AUTH: 'true',
