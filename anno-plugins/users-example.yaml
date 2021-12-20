@@ -18,6 +18,10 @@ alice:
     - [{collection: 'default'},         {role: 'creator'}]
 
 bob:
+  alias:
+    # Aliases are used to map user IDs from external identification providers
+    # to locally known users:
+    - 'https://idp.hebis.de/uni-frankfurt!https://digi.ub.uni-heidelberg.de/shibboleth!9PNZamKjXMYh2YzjK9eRhwr302U='
   public:
     displayName: 'Bob Doe'
     icon: 'icons/bob'
