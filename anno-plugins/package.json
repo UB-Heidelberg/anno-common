@@ -1,0 +1,28 @@
+{
+  "name": "@kba/anno-plugins",
+  "version": "0.0.8",
+  "description": "Plugins to augment anno-store*",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "node ../scripts/yml2json.js *.yml",
+    "test": "tap *.test.js"
+  },
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-plugins#readme",
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "@kba/anno-fixtures": "0.0.4"
+  },
+  "dependencies": {
+    "@kba/anno-errors": "0.0.2",
+    "@kba/anno-util": "0.0.2",
+    "@kba/anno-util-loaders": "^0.0.8",
+    "ajv": "^5.5.2",
+    "deep-extend": "^0.5.0",
+    "envyconf": "0.0.5",
+    "lodash.set": "^4.3.2",
+    "sift-rule": "^0.1.3"
+  }
+}

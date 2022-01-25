@@ -1,0 +1,65 @@
+DONE
+[X] creator
+[X] delete
+
+TODO
+[-] collections
+    [ ] Container formats
+[X] config must be loaded on new
+[X] Github pages
+    [X] context.jsonld
+[ ] Commenting / Replying
+[ ] http store
+    [X] create
+    [X] get
+    [-] search
+    [X] revise
+    [X] delete
+mongo store
+    [X] create
+    [X] get
+    [X] search
+    [X] revise
+    [X] delete
+[ ] cli
+    [-] create
+    [ ] get
+    [ ] search
+    [ ] revise
+    [ ] delete
+[ ] server
+    [ ] auth
+    [X] reply/comment
+    [-] handle id/via/canonical
+    [X] RDF conneg
+    [ ] 410
+    [ ] 409 If replacing 'via' or changing 'canonical'
+    [X] 415 for invalid: The Annotation Client sent an entity-body that is not able to be processed by the Server, such as non-Annotation or in a context that is unrecognized.
+    [X] hasParent undefined?
+[ ] store.search should return a Collection not an array
+[ ] honor Prefer: return=representation / return=minimal to imply skipVersions/metadataOnly, Preference-Applied sent back
+    [ ] DROP skipVersions (not implemented anymore)
+[X] schema: use getters and load config
+[X] fix perm.nedb / acl
+[ ] ACL rules should emit status/message instead of true/false
+[ ] Unify ACL / User processor interfaces (DRY)
+
+[X] fix import (recursive will clobber revisions and replies!!!!)
+[X] Send DOI if set as Link rel="canonical"
+[X] handle multiple creators
+[ ] replace axios with fetch-ponyfill
+[X] handle DOI minting with revise
+[X] mintDoi should take an annotation ID not an annotation
+[X] "Cannot set headers after sent" error
+[X] Replace 'metadataOnly', 'skipVersions', ... with 'blacklist' and 'whitelist' options to allow/disallow certain props
+[X] BUG: import in mongolike creates versions of versions which is very very wrong
+[X] ACL is broken for array-creators and string creators?  => mintDoi MUST take anno not annoID :(
+[ ] rename user-auth -> jwt-auth
+
+[ ] Add option to choose anno env vars in demos
+[ ] Clean up plugins into proper hooks
+[x] webpack anno-schema
+[x] fix validator sample
+[ ] Create multi-url search that returns count of annotations per target id
+[ ] store.search should be pageable
+[ ] Clean up collection injection code

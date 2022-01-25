@@ -1,0 +1,617 @@
+#
+# Web Annotation Data Model
+# =========================
+#
+# Name of the definitions follows model not vocab where possible
+#
+# Order in this file is close to the model spec
+#
+#
+# https://www.w3.org/TR/annotation-model
+#
+
+definitions:
+
+#{{{ xsd_dateTime, iri, language, textDirection
+
+  # https://www.w3.org/TR/xmlschema-2/#dateTime
+  xsd_dateTime:
+    type: 'string'
+    format: 'date-time'
+
+  # https://tools.ietf.org/html/rfc3987
+  iri:
+    type: 'string'
+    anyOf:
+        - format: 'uri'
+        - pattern: '^urn:'
+
+  iri_object:
+    type: 'object'
+    required: ['id']
+    additionalProperties: false
+    properties:
+      id: {$ref: '#/definitions/iri'}
+
+  # https://tools.ietf.org/html/rfc6838
+  mediaType:
+    type: 'string'
+    pattern: '.*/.*'
+
+  # https://tools.ietf.org/html/bcp47
+  # http://loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt
+  language:
+    type: 'string'
+    pattern: '[a-z]{2,3}'
+
+  textDirection:
+    type: 'string'
+    enum: ['', 'ltr', 'rtl', 'auto']
+
+#}}}
+#{{{ 3.1 Annotations
+
+  Annotation:
+    type: 'object'
+    required:
+      # - 'id'
+      - 'target'
+    properties:
+      # see also AnnotationMetadata
+      id:        {$ref: '#/definitions/iri'}
+      created:   {$ref: '#/definitions/xsd_dateTime'}
+      modified:  {$ref: '#/definitions/xsd_dateTime'}
+      generated: {$ref: '#/definitions/xsd_dateTime'}
+      creator:
+        oneOf:
+          - {type: 'string'}
+          - {$ref: '#/definitions/Person'}
+          - type: 'array'
+            items:
+              anyOf:
+                - {type: 'string'}
+                - {$ref: '#/definitions/Person'}
+      generator:
+        oneOf:
+        - {$ref: '#/definitions/iri'}
+        - {$ref: '#/definitions/Software'}
+      canonical: {type: 'string'}
+      via:       {$ref: '#/definitions/iri'}
+      styledBy:  {oneOf: [{$ref: '#/definitions/iri'}, {$ref: '#/definitions/CssStylesheet'}]}
+      body:
+        anyOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/iri_object'}
+          - {$ref: '#/definitions/Resource'}
+          - {$ref: '#/definitions/TextualBody'}
+          - {$ref: '#/definitions/Choice'}
+          - {$ref: '#/definitions/SpecificResource'}
+          - type: 'array'
+            items:
+              anyOf:
+                - {$ref: '#/definitions/iri'}
+                - {$ref: '#/definitions/iri_object'}
+                - {$ref: '#/definitions/Resource'}
+                - {$ref: '#/definitions/TextualBody'}
+                - {$ref: '#/definitions/Choice'}
+                - {$ref: '#/definitions/SpecificResource'}
+      target:
+        anyOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/iri_object'}
+          - {$ref: '#/definitions/Resource'}
+          - {$ref: '#/definitions/SpecificResource'}
+          - type: 'array'
+            items:
+              anyOf:
+                - {$ref: '#/definitions/iri'}
+                - {$ref: '#/definitions/iri_object'}
+                - {$ref: '#/definitions/Resource'}
+                - {$ref: '#/definitions/SpecificResource'}
+
+#}}}
+#{{{ 3.2 Bodies and Targets - Resource
+#
+# https://www.w3.org/TR/annotation-model/#bodies-and-targets
+#
+
+  Resource:
+    type: 'object'
+    # anyOf:
+      # - required: ['id']
+      # - required: ['type']
+    properties:
+      id:                 {$ref: '#/definitions/iri'}
+      format:             {$ref: '#/definitions/mediaType'}
+      language:
+        oneOf:
+          - {$ref: '#/definitions/language'}
+          - {type: 'array', items: {$ref: '#/definitions/language'}}
+      processingLanguage: {$ref: '#/definitions/language'}
+      textDirection:      {$ref: '#/definitions/textDirection'}
+      # properties.type
+      # type: {$ref: '#/definitions/resourceClassType'}
+
+#}}}
+#{{{ 3.2 Bodies and Targets - TargetResource XXX Unused
+#
+# https://www.w3.org/TR/annotation-model/#bodies-and-targets
+#
+
+  TargetResource:
+    allOf:
+      - {$ref: '#/definitions/Resource'}
+      # XXX too strict to require either source or id
+      # - anyOf:
+      #     - required: ['source']
+      #     - required: ['id']
+      - type: 'object'
+        properties:
+          renderedVia: {oneOf: [{$ref: '#/definitions/iri'}, {$ref: '#/definitions/Software'}]}
+          styleClass: {type: 'string'}
+          source: 
+            allOf:
+              - {$ref: '#/definitions/iri'}
+              - default: 'http://foo'
+          scope: {$ref: '#/definitions/iri'}
+          selector:
+            oneOf:
+              - {$ref: '#/definitions/iri'}
+              - {$ref: '#/definitions/Selector'}
+              - type: 'array'
+                items:
+                  anyOf:
+                    - {$ref: '#/definitions/iri'}
+                    - {$ref: '#/definitions/Selector'}
+
+#}}}
+#{{{ 3.3.1 Lifecycle Information
+
+  AnnotationMetadata:
+    type: 'object'
+    properties:
+      created:   {$ref: '#/definitions/xsd_dateTime'}
+      modified:  {$ref: '#/definitions/xsd_dateTime'}
+      generated: {$ref: '#/definitions/xsd_dateTime'}
+      creator:
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/Person'}
+      generator:
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/Software'}
+
+#}}}
+#{{{ 3.2.2 Classes
+
+  ResourceClass:
+    type: 'string'
+    enum: 
+      - 'Dataset'
+      - 'Image'
+      - 'Video'
+      - 'Sound'
+      - 'Text'
+      # - 'Composite'
+      # - 'TextualBody'
+      # - 'Choice'
+      # - 'SpecificResource'
+
+  resourceClassType: 
+    type: 'string'
+    # anyOf:
+    #   - {$ref: '#/definitions/ResourceClass'}
+    #   - type: 'array'
+    #     items: {type: 'string'}
+    #     contains: [{$ref: '#/definitions/ResourceClass'}]
+    #   - {type: 'string'}
+
+#}}}
+#{{{ 3.2.4 Embedded Textual Body
+#
+# https://www.w3.org/TR/annotation-model/#embedded-textual-body
+#
+
+  TextualBody:
+    type: 'object'
+    required:
+      - 'type'
+      - 'value'
+    properties:
+      type:
+        oneOf:
+          - {type: 'string', enum: ['TextualBody']}
+          - type: 'array'
+            items: {type: 'string'}
+            contains: {const: 'TextualBody'}
+      value:  {type: 'string'}
+      format: {$ref: '#/definitions/mediaType'}
+
+#}}}
+#{{{ 3.2.7 Choice Between Bodies
+#
+# https://www.w3.org/TR/annotation-model/#choice-between-bodies
+
+  Choice:
+    type: 'object'
+    required:
+      - 'type'
+      # - 'items'
+    properties:
+      type: {type: 'string', enum: ['Choice']}
+      items:
+        type: 'array'
+        minItems: 1
+        items: 
+          anyOf:
+            - {$ref: '#/definitions/TextualBody'}
+            - {$ref: '#/definitions/Resource'}
+            - {$ref: '#/definitions/SpecificResource'}
+
+#}}}
+#{{{ 3.3.5 Motivation and Purpose
+#
+#
+# https://www.w3.org/TR/annotation-model/#motivation-and-purpose
+#
+  Motivation:
+    type: 'string'
+    enum:
+      - 'bookmarking'
+      - 'classifying'
+      - 'commenting'
+      - 'describing'
+      - 'editing'
+      - 'highlighting'
+      - 'identifying'
+      - 'linking'
+      - 'moderating'
+      - 'questioning'
+      - 'replying'
+      - 'tagging'
+
+#}}}
+#{{{ 3.3.2 Agents
+
+  Agent:
+    type: 'object'
+    required:
+      - 'id'
+    properties:
+      id:         {$ref: '#/definitions/iri'}
+      type:       {type: 'string', enum: ['Person', 'Organization', 'Software']}
+      name:       {oneOf: [{type: 'string'}, {type: 'array', items: {type: 'string'}}]}
+      nickname:   {type: 'string'}
+      email:      {type: 'string', format: 'email'}
+      email_sha1: {type: 'string'}
+      homepage:   {$ref: '#/definitions/iri'}
+
+  Person:
+    allOf:
+      - {$ref: '#/definitions/Agent'}
+      - properties:
+          type: {enum: ['Person']}
+      - required: ['name']
+
+
+#}}}
+#{{{ 4 Specific Resources
+
+  SpecificResource:
+    type: 'object'
+    anyOf:
+      - required: ['source', 'purpose']
+      - required: ['source', 'selector']
+      - required: ['source', 'styleClass']
+      - required: ['source', 'state']
+      - required: ['source', 'scope']
+      - required: ['source']
+    properties:
+      type: {type: 'string', enum: ['SpecificResource']}
+      styleClass: {type: 'string'}
+      source:
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/Resource'}
+      motivation: 
+        oneOf:
+          - {$ref: '#/definitions/Motivation'}
+          - {type: 'array', contains: {$ref: '#/definitions/Motivation'}}
+      purpose: 
+        oneOf:
+          - {$ref: '#/definitions/Motivation'}
+          - {type: 'array', contains: {$ref: '#/definitions/Motivation'}}
+      scope: {$ref: '#/definitions/iri'}
+      accessibility: {type: 'string'} # TODO
+      state:
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/iri_object'}
+          - {$ref: '#/definitions/State'}
+          - type: 'array'
+            items:
+              oneOf:
+                - {$ref: '#/definitions/iri'}
+                - {$ref: '#/definitions/iri_object'}
+                - {$ref: '#/definitions/State'}
+      selector: 
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/Selector'}
+
+#}}}
+#{{{ 4.2 Selectors
+#
+#
+#  https://www.w3.org/TR/annotation-model/#selectors
+#
+
+  Selector:
+    type: 'object'
+    oneOf:
+      - {$ref: '#/definitions/FragmentSelector'}
+      - {$ref: '#/definitions/CssSelector'}
+      - {$ref: '#/definitions/XPathSelector'}
+      - {$ref: '#/definitions/TextQuoteSelector'}
+      - {$ref: '#/definitions/TextPositionSelector'}
+      - {$ref: '#/definitions/DataPositionSelector'}
+      - {$ref: '#/definitions/SvgSelector'}
+      - {$ref: '#/definitions/RangeSelector'}
+
+#}}}
+#{{{ 4.2.1 Fragment Selector
+#
+# https://www.w3.org/TR/annotation-model/#fragment-selector
+
+  FragmentSelector:
+    type: 'object'
+    required: 
+      - 'type'
+      - 'value'
+    properties:
+      type:       {type: 'string', enum: ['FragmentSelector']}
+      value:      {type: 'string'}
+      # refinedBy:  {$ref: '#/definitions/Selector'}
+      conformsTo:
+        type: 'string'
+        enum:
+          - 'http://tools.ietf.org/rfc/rfc3236'                  # HTML
+          - 'http://tools.ietf.org/rfc/rfc3778'                  # PDF
+          - 'http://tools.ietf.org/rfc/rfc5147'                  # Plain Text
+          - 'http://tools.ietf.org/rfc/rfc3023'                  # XML
+          - 'http://tools.ietf.org/rfc/rfc3870'                  # RDF/XML
+          - 'http://tools.ietf.org/rfc/rfc7111'                  # CSV
+          - 'http://www.w3.org/TR/media-frags/'                  # Media
+          - 'http://www.w3.org/TR/SVG/'                          # SVG
+          - 'http://www.idpf.org/epub/linking/cfi/epub-cfi.html' # EPUB3
+
+#}}}
+#{{{ 4.2.2 CSS Selector
+
+  CssSelector:
+    type: 'object'
+    required:
+      - 'type'
+      - 'value'
+    properties:
+      type:      {type: 'string', enum: ['CssSelector']}
+      value:     {type: 'string'}
+# TODO recursion messes with swagger
+#      refinedBy: {$ref: '#/definitions/Selector'}
+
+#}}}
+#{{{ 4.2.3 Xpath Selector
+
+  XPathSelector:
+    type: 'object'
+    required:
+      - 'type'
+      - 'value'
+    properties:
+      type:      {type: 'string', enum: ['XPathSelector']}
+      value:     {type: 'string'}
+# TODO recursion messes with swagger
+#      refinedBy: {$ref: '#/definitions/Selector'}
+
+
+#}}}
+#{{{ 4.2.4 Text Quote Selector
+
+  TextQuoteSelector:
+    type: 'object'
+    required:
+      - 'type'
+      - 'exact'
+    properties:
+      type:      {type: 'string', enum: ['TextQuoteSelector']}
+      exact:     {type: 'string'}
+      suffix:    {type: 'string'}
+# TODO recursion messes with swagger
+#      refinedBy: {$ref: '#/definitions/Selector'}
+
+#}}}
+#{{{ 4.2.4 Text Position Selector
+
+  TextPositionSelector:
+    type: 'object'
+    required:
+      - 'start'
+      - 'end'
+    properties:
+      type: {type: 'string', enum: ['TextPositionSelector']}
+      start:     {type: 'number'}
+      end:       {type: 'number'}
+# TODO recursion messes with swagger
+#      refinedBy: {$ref: '#/definitions/Selector'}
+
+#}}}
+#{{{ 4.2.5 Data Position Selector
+
+  DataPositionSelector:
+    type: 'object'
+    required:
+      - 'start'
+      - 'end'
+    properties:
+      type:      {type: 'string', enum: ['DataPositionSelector']}
+      start:     {type: 'number'}
+      end:       {type: 'number'}
+# TODO recursion messes with swagger
+#      refinedBy: {$ref: '#/definitions/Selector'}
+
+#}}}
+#{{{ 4.2.6 SVG Selector
+
+  SvgSelector:
+    type: 'object'
+    oneOf:
+      - required: ['id', 'type']
+      - required: ['value', 'type']
+    properties:
+      id:    {$ref: '#/definitions/iri'}
+      type:  {type: 'string', enum: ['SvgSelector']}
+      value: {type: 'string'}
+# TODO recursion messes with swagger
+#      refinedBy: {$ref: '#/definitions/Selector'}
+
+#}}}
+#{{{ 4.2.7 Range Selector
+
+  RangeSelector:
+    type: 'object'
+    required:
+      - 'type'
+      - 'startSelector'
+      - 'endSelector'
+    properties:
+      type:          {type: 'string', enum: ['RangeSelector']}
+      startSelector: {$ref: '#/definitions/Selector'}
+      endSelector:   {$ref: '#/definitions/Selector'}
+# TODO recursion messes with swagger
+#      refinedBy: {$ref: '#/definitions/Selector'}
+
+#}}}
+#{{{ 4.3 States
+
+  State:
+    oneOf:
+      - {$ref: '#/definitions/TimeState'}
+      - {$ref: '#/definitions/HttpRequestState'}
+
+#}}}
+#{{{ 4.3.1 Time State
+
+  TimeState:
+    type: 'object'
+    required:
+      - 'type'
+    properties:
+      type:            {type: 'string', enum: ['TimeState']}
+      sourceDate:      {$ref: '#/definitions/xsd_dateTime'}
+      sourceDateStart: {$ref: '#/definitions/xsd_dateTime'}
+      sourceDateEnd:   {$ref: '#/definitions/xsd_dateTime'}
+      cached:          {$ref: '#/definitions/iri'}
+
+#}}}
+#{{{ 4.3.2 Request Header State
+
+  HttpRequestState:
+    type: 'object'
+    required:
+      - 'type'
+    properties:
+      type:  {type: 'string', enum: ['HttpRequestState']}
+      value: {type: 'string'}
+
+#}}}
+#{{{ 4.4 Styles
+
+  CssStylesheet:
+    type: 'object'
+    required:
+      - 'type'
+      - 'value'
+    properties:
+      type:  {type: 'string', enum: ['CssStylesheet']}
+      value: {type: 'string'}
+
+#}}}
+#{{{ 4.5 Rendering Software
+
+  Software:
+    allOf:
+      - {$ref: '#/definitions/Agent'}
+      - required:
+          - 'id'
+          - 'type'
+        properties:
+          id:   {$ref: '#/definitions/iri'}
+          type: {type: 'string', enum: ['Software']}
+          'schema:softwareVersion': {type: 'string'}
+
+#}}}
+#{{{ 5.1 Annotation Collection
+
+  AnnotationCollection:
+    type: 'object'
+    required:
+      - 'id'
+      - 'type'
+    properties:
+      '@context':
+        oneOf:
+          - {type: 'string', enum: ['http://www.w3.org/ns/anno.jsonld']}
+          - type: 'array'
+            items: {type: 'string'}
+            contains: {const: 'http://www.w3.org/ns/anno.jsonld'}
+      id: {$ref: '#/definitions/iri'}
+      type:
+        oneOf: 
+          - {type: 'string', enum: ['AnnotationCollection']}
+          - type: 'array'
+            items: {type: 'string'}
+            contains: {const: 'AnnotationCollection'}
+      label: {type: 'string'}
+      total: {type: 'number'}
+      first:
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/AnnotationPage'}
+      last:
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/AnnotationPage'}
+
+# #}}}
+#{{{ 5.2 Annotation Pages
+
+  AnnotationPage:
+    type: 'object'
+    properties:
+      '@context':
+        oneOf:
+          - {type: 'string', enum: ['http://www.w3.org/ns/anno.jsonld']}
+          - type: 'array'
+            items: {type: 'string'}
+            contains: {const: 'http://www.w3.org/ns/anno.jsonld'}
+      id: {$ref: '#/definitions/iri'}
+      type:
+        oneOf:
+          - {type: 'string', enum: ['AnnotationPage']}
+          - type: 'array'
+            items: {type: 'string'}
+            contains: {const: 'AnnotationPage'}
+      partOf:
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/AnnotationPage'}
+      items:
+        type: 'array'
+        items:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/Annotation'}
+
+#}}}
+
+# vim: foldmarker={{{,}}}

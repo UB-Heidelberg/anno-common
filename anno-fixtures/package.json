@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "@kba/anno-fixtures",
+  "version": "0.0.4",
+  "description": "Test fixtures for anno",
+  "main": "index.json",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-fixtures#readme",
+  "scripts": {
+    "rebuild": "make index.json"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "async": "^2.3.0"
+  }
+}

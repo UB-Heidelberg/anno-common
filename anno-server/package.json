@@ -1,0 +1,53 @@
+{
+  "name": "@kba/anno-server",
+  "version": "0.0.8",
+  "description": "Open Annotation Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "tap test/*.test.js",
+    "start": "node server.js",
+    "docker": "docker build -t kbai/anno-server"
+  },
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-server#readme",
+  "author": "kba",
+  "license": "MIT",
+  "dependencies": {
+    "@kba/anno-errors": "^0.0.2",
+    "@kba/anno-fixtures": "0.0.4",
+    "@kba/anno-plugins": "^0.0.8",
+    "@kba/anno-queries": "0.0.4",
+    "@kba/anno-schema": "^0.0.8",
+    "@kba/anno-store": "^0.0.8",
+    "@kba/anno-store-file": "^0.0.8",
+    "@kba/anno-store-mongodb": "^0.0.8",
+    "@kba/anno-util": "^0.0.2",
+    "@kba/anno-util-loaders": "^0.0.8",
+    "async": "^2.3.0",
+    "axios": "^0.15.3",
+    "body-parser": "^1.17.0",
+    "cache-manager": "^2.4.0",
+    "compression": "^1.7.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "envyconf": "^0.0.5",
+    "express": "^4.15.0",
+    "express-jwt": "^5.1.0",
+    "express-session": "^1.15.2",
+    "express-unless": "^0.3.0",
+    "js-yaml": "3.10.0",
+    "jsonld-rapper": "^0.2.4",
+    "jsonwebtoken": "^7.3.0",
+    "morgan": "^1.8.1",
+    "mustache": "^2.3.0",
+    "nodemailer": "^4.0.1",
+    "object-prune": "^0.0.4",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-rc.4"
+  },
+  "devDependencies": {
+    "pm2": "^2.4.6"
+  }
+}

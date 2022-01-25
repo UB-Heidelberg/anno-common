@@ -1,0 +1,92 @@
+# See [sift-rule](https://github.com/kba/sift-rule) for rule mechanics
+#
+# Structure is
+# [ CONDITION, RESULT, DESCRIPTION ]
+#
+# CONDITION is a sift query on collection, annotation, user and method
+# RESULT is a tru-ish value to allow or false to deny request
+# DESCRIPTION is an optional description of the rule
+
+# - - collection: 'test-collection'
+#   - true
+#   - "Allow everybody to do everything on 'test-collection'"
+
+- - user.inactive: true
+  - false
+  - "Inactive users are not allowed to do anything"
+
+- - method: {$or: ['init', 'aclCheck', 'get', 'search']}
+  - true
+  - "Allow store initialization, rights checks, search and retrieval for anyone by default"
+
+- - user.role: 'admin'
+  - true
+  - "Allow users with 'admin' role to do everything"
+
+- - method: {$or: ['create', 'revise']}
+    user.role: 'moderator'
+  - true
+  - "Allow moderators to revise / reply to any annotations"
+
+- - method: 'create'
+    user.role: 'creator'
+  - true
+  - "Allow users with 'creator' role to create new annotations"
+
+- - method: 'revise'
+    user.id: {$exists: true}
+    # TODO check that oldAnno.creator == anno.creator
+    $or:
+      - oldAnno.creator.id: {$exists: true}
+        $or:
+          - oldAnno.creator.id: {$ref: '/user/id'}
+          - oldAnno.creator.id: {$ref: '/user'}
+      - oldAnno.creator: {$exists: true}
+        $or:
+          - oldAnno.creator: {$ref: '/user/id'}
+          - oldAnno.creator: {$ref: '/user'}
+  - true
+  - "Allow users to revise their own annotations"
+
+- - method: 'create'
+    anno.creator: {$exists: true}
+    user.id: {$exists: true}
+    $or:
+      - anno.creator: {$ref: '/user/id'}
+      - anno.creator.id: {$ref: '/user/id'}
+      - anno.creator: {$ref: '/user'}
+      - anno.creator.id: {$ref: '/user'}
+  - true
+  - "Allow users to reply to their own annotations"
+
+- - method: 'mintDoi'
+    $or:
+      - user.role: 'moderator'
+      # - anno.creator: {$exists: true}
+        # # user: {$exists: true}
+        # $or:
+        #   - anno.creator: {$ref: '/user'}
+        #   - anno.creator.id: {$ref: '/user'}
+        #   - anno.creator: {$ref: '/user/id'}
+        #   - anno.creator.id: {$ref: '/user/id'}
+  - true
+  - "Allow moderators and users for their own annotations to mint DOIS"
+
+- - method: 'import'
+    $or:
+    - user.role: 'moderator'
+    # - role: 'doiMinter'
+    #   anno.creator: {$exists: true}
+    #   # user: {$exists: true}
+    #   $or:
+    #     - anno.creator: {$ref: '/user'}
+    #     - anno.creator.id: {$ref: '/user'}
+    #     - anno.creator: {$ref: '/user/id'}
+    #     - anno.creator.id: {$ref: '/user/id'}
+  - true
+  - "Importers may import anything, doiMinters may import their own annotations"
+
+# Default Rule. Must be last
+- - {}
+  - false
+  - "Fallback to disallow any interaction"
